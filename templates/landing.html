@@ -1,0 +1,2494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Robic Rufarm - Revolutionizing Indian agriculture through AI-powered technology, precision farming, and sustainable solutions">
+  <meta name="theme-color" content="#5364ff">
+  <meta name="keywords" content="agriculture technology, precision farming, AI farming, Indian agriculture, sustainable farming">
+  <title>Robic Rufarm - Revolutionizing Agriculture Through Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.98/build/spline-viewer.js"></script>
+  <style>
+    :root {
+      /* Enhanced color palette with gradients */
+      --primary: #5364ff;
+      --primary-light: #7583ff;
+      --primary-dark: #3545e0;
+      --primary-transparent: rgba(83, 100, 255, 0.1);
+      
+      --secondary: #00c8b4;
+      --secondary-light: #20e6d2;
+      --secondary-dark: #00a896;
+      
+      --accent: #ff6b6b;
+      --accent-light: #ff8a8a;
+      --accent-dark: #e05454;
+      
+      --success: #10b981;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      
+      --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+      --gradient-hero: linear-gradient(135deg, #3545e0, #00c8b4, #5364ff);
+      --gradient-cards: linear-gradient(135deg, rgba(83, 100, 255, 0.05), rgba(0, 200, 180, 0.05));
+      --gradient-accent: linear-gradient(135deg, var(--primary), var(--accent));
+      
+      /* Light mode */
+      --bg-color: #f8f9fc;
+      --card-bg: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --shadow-color: rgba(0, 0, 0, 0.04);
+      --gradient-overlay: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+      --scroll-indicator-bg: rgba(0, 0, 0, 0.1);
+      --scroll-indicator-border: rgba(255, 255, 255, 0.8);
+      --scroll-indicator-arrow: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --gradient-overlay: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(15,23,42,1) 100%);
+      --scroll-indicator-bg: rgba(0, 0, 0, 0.3);
+      --scroll-indicator-border: rgba(255, 255, 255, 0.6);
+      --scroll-indicator-arrow: rgba(255, 255, 255, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--bg-color);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Floating particles effect */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--primary-transparent);
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: float 20s infinite linear;
+    }
+
+    .particle:nth-child(2n) {
+      background: var(--secondary-light);
+      width: 12px;
+      height: 12px;
+      animation-duration: 25s;
+    }
+
+    .particle:nth-child(3n) {
+      background: var(--accent-light);
+      width: 6px;
+      height: 6px;
+      animation-duration: 30s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(100px, 50px);
+      }
+      50% {
+        transform: translate(50px, 100px);
+      }
+      75% {
+        transform: translate(-50px, 50px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Header / Navbar Styles */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 40px;
+      background-color: rgba(248, 249, 252, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px var(--shadow-color);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .header {
+      background-color: rgba(15, 23, 42, 0.8);
+    }
+
+    .header.scrolled {
+      padding: 10px 40px;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover .logo-img {
+      transform: rotate(5deg);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-highlight {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--card-bg);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.05) rotate(15deg);
+      box-shadow: 0 4px 15px rgba(83, 100, 255, 0.4);
+    }
+    
+    .theme-toggle i {
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px; /* Account for fixed header */
+      background: linear-gradient(135deg, rgba(83, 100, 255, 0.05), rgba(0, 200, 180, 0.05));
+    }
+
+    .hero-content {
+      max-width: 600px;
+      padding: 0 40px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .hero-subtitle {
+      color: var(--primary);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: 0.2s;
+    }
+
+    .hero-subtitle::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gradient-primary);
+      display: inline-block;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    /* Gradient Button */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 14px 28px;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: 0 5px 15px rgba(83, 100, 255, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: 0.8s;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(83, 100, 255, 0.4);
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+      transform: translateX(-100%);
+      z-index: -1;
+    }
+
+    .cta-button:hover::after {
+      transform: translateX(100%);
+      transition: transform 0.8s ease;
+    }
+
+    .cta-button i {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    /* Secondary Button Style */
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--primary-transparent);
+      color: var(--primary);
+    }
+    
+    .btn-secondary::after {
+      background: linear-gradient(90deg, rgba(83, 100, 255, 0) 0%, rgba(83, 100, 255, 0.1) 50%, rgba(83, 100, 255, 0) 100%);
+    }
+
+    /* Spline Model Container */
+    .spline-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 1s;
+    }
+
+    spline-viewer {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Hide Spline branding */
+    spline-viewer::part(logo),
+    spline-viewer::part(footer) {
+      display: none !important;
+    }
+
+    /* Impact Section - Redesigned */
+    .impact-section {
+      padding: 100px 40px;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .impact-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .impact-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 60px;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    .impact-container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      gap: 40px;
+    }
+
+    .impact-model {
+      flex: 1;
+      height: 500px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px var(--shadow-color);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .impact-model:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(83, 100, 255, 0.15);
+    }
+
+    .impact-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .impact-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .stat-item {
+      background-color: var(--card-bg);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 20px var(--shadow-color);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(83, 100, 255, 0.15);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .impact-text {
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-size: 1.05rem;
+    }
+
+    /* Solutions Section */
+    .solutions-section {
+      padding: 100px 40px;
+      background-color: var(--bg-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .solutions-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 70%, rgba(0, 200, 180, 0.08), transparent 50%);
+      z-index: 0;
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 60px auto 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    .solution-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .solution-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(83, 100, 255, 0.2);
+    }
+
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-primary);
+      transition: height 0.3s ease;
+    }
+
+    .solution-card:hover::before {
+      height: 6px;
+    }
+
+    .solution-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-transparent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .solution-card:hover .solution-icon {
+      background: var(--gradient-primary);
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .solution-icon i {
+      font-size: 28px;
+      color: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .solution-card:hover .solution-icon i {
+      color: white;
+    }
+
+    .solution-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-primary);
+    }
+
+    .solution-text {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .solution-features {
+      list-style-type: none;
+      margin-bottom: 20px;
+    }
+
+    .solution-feature {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+    }
+
+    .solution-feature:before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      top: 2px;
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    .solution-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 20px;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(83, 100, 255, 0.2);
+      align-self: flex-start;
+    }
+
+    .solution-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(83, 100, 255, 0.3);
+    }
+
+    .solution-cta i {
+      margin-left: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .solution-cta:hover i {
+      transform: translateX(3px);
+    }
+
+    /* Timeline Section */
+    .timeline-section {
+      padding: 100px 40px;
+      position: relative;
+      background-color: var(--bg-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 70% 30%, rgba(83, 100, 255, 0.08), transparent 50%);
+      z-index: 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 60px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: 60px auto 0;
+      z-index: 1;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 30px;
+      position: relative;
+      margin-bottom: 60px;
+      width: 50%;
+    }
+
+    .timeline-item:nth-child(even) {
+      align-self: flex-end;
+      justify-content: flex-start;
+      padding-left: 30px;
+      padding-right: 0;
+      margin-left: 50%;
+    }
+
+    .timeline-content {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .timeline-content:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(83, 100, 255, 0.15);
+    }
+
+    .timeline-date {
+      display: inline-block;
+      color: white;
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 14px;
+      background: var(--gradient-primary);
+      padding: 5px 12px;
+      border-radius: 30px;
+    }
+
+    .timeline-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .timeline-subtitle {
+      color: var(--primary);
+      font-size: 1rem;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .timeline-points {
+      list-style-type: none;
+    }
+
+    .timeline-point {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+
+    .timeline-point:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .timeline-icon {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 15px var(--shadow-color);
+      border: 4px solid var(--card-bg);
+      transition: transform 0.3s ease;
+    }
+
+    .timeline-item .timeline-icon {
+      right: -55px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-icon {
+      left: -55px;
+    }
+
+    .timeline-content:hover .timeline-icon {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    .timeline-icon img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(10);
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+      padding: 80px 40px;
+      background: var(--gradient-cards);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .newsletter-container {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .newsletter-text {
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-size: 1.05rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: var(--text-primary);
+      background-color: var(--card-bg);
+    }
+
+    .newsletter-btn {
+      padding: 15px 25px;
+      border: none;
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .newsletter-btn:hover {
+      background: var(--gradient-accent);
+      transform: translateX(3px);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 60px 40px 40px;
+      text-align: center;
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(83, 100, 255, 0.05), transparent 50%);
+      z-index: 0;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      gap: 40px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--gradient-primary);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-link {
+      margin-bottom: 10px;
+    }
+
+    .footer-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer-link a:hover {
+      color: var(--primary);
+      transform: translateX(3px);
+    }
+
+    .footer-link a i {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+
+    .footer-contact {
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .footer-contact i {
+      margin-top: 5px;
+      color: var(--primary);
+    }
+
+    .footer-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 8px 20px var(--shadow-color);
+      border: 2px solid var(--border-color);
+      transition: transform 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .footer-text {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+      justify-content: center;
+    }
+
+    .social-link {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+      font-size: 18px;
+    }
+
+    .social-link:hover {
+      background: var(--gradient-primary);
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(83, 100, 255, 0.3);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      padding-top: 30px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator-container {
+      position: absolute;
+      bottom: 80px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .scroll-indicator-container.visible {
+      opacity: 1;
+    }
+
+    .oval-container {
+      width: 30px;
+      height: 50px;
+      border: 2px solid var(--scroll-indicator-border);
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--scroll-indicator-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5),
+                  inset 0 0 8px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .oval-container:hover {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7),
+                  inset 0 0 12px rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .oval-arrow {
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid var(--scroll-indicator-arrow);
+      border-bottom: 2px solid var(--scroll-indicator-arrow);
+      transform: rotate(45deg);
+      position: relative;
+      animation: arrowPulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+    }
+
+    .oval-container::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid var(--scroll-indicator-arrow);
+      border-bottom: 2px solid var(--scroll-indicator-arrow);
+      transform: rotate(45deg);
+      animation: arrowPulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+      animation-delay: 1s;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+    }
+
+    @keyframes arrowPulse {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px) rotate(45deg);
+      }
+      30% {
+        opacity: 1;
+        transform: translateY(0) rotate(45deg);
+      }
+      60% {
+        opacity: 1;
+        transform: translateY(10px) rotate(45deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(15px) rotate(45deg);
+      }
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 45px;
+      height: 45px;
+      background: var(--gradient-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      box-shadow: 0 5px 15px rgba(83, 100, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(83, 100, 255, 0.5);
+    }
+
+    /* Cookie Consent */
+    .cookie-consent {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      max-width: 360px;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      border: 1px solid var(--border-color);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .cookie-consent.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .cookie-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .cookie-title i {
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .cookie-title h3 {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .cookie-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .cookie-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .cookie-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+    }
+
+    .cookie-btn-accept {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+    }
+
+    .cookie-btn-accept:hover {
+      box-shadow: 0 5px 15px rgba(83, 100, 255, 0.3);
+    }
+
+    .cookie-btn-settings {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .cookie-btn-settings:hover {
+      background-color: var(--bg-color);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Loading Animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .loading-overlay.loaded {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .loading-spinner:before,
+    .loading-spinner:after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .loading-spinner:before {
+      width: 100%;
+      height: 100%;
+      background: var(--primary-light);
+      animation-delay: 0.3s;
+    }
+
+    .loading-spinner:after {
+      width: 80%;
+      height: 80%;
+      background: var(--secondary);
+      top: 10%;
+      left: 10%;
+      animation-delay: 0.6s;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.6);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(0.6);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+      
+      .spline-container {
+        width: 50%;
+      }
+
+      .impact-container {
+        flex-direction: column;
+      }
+
+      .impact-model {
+        order: 2;
+        height: 400px;
+      }
+
+      .impact-content {
+        order: 1;
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 991px) {
+      .header {
+        padding: 15px 20px;
+      }
+      
+      .header.scrolled {
+        padding: 10px 20px;
+      }
+      
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: var(--card-bg);
+        padding: 20px;
+        box-shadow: 0 10px 20px var(--shadow-color);
+        border-bottom: 1px solid var(--border-color);
+        gap: 15px;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .nav-links.active {
+        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        z-index: 999;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .hero-section {
+        flex-direction: column;
+        padding: 100px 0 50px;
+      }
+      
+      .hero-content {
+        max-width: 100%;
+        text-align: center;
+        padding: 0 20px;
+        margin-bottom: 50px;
+      }
+
+      .hero-subtitle {
+        justify-content: center;
+      }
+      
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .spline-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+      }
+      
+      .impact-container {
+        flex-direction: column;
+      }
+
+      .impact-model {
+        height: 400px;
+      }
+      
+      .timeline::before {
+        left: 30px;
+      }
+      
+      .timeline-item,
+      .timeline-item:nth-child(even) {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 0;
+        margin-left: 0;
+      }
+      
+      .timeline-item .timeline-icon,
+      .timeline-item:nth-child(even) .timeline-icon {
+        left: 5px;
+      }
+
+      .back-to-top {
+        right: 20px;
+        bottom: 20px;
+      }
+      
+      .newsletter-form {
+        flex-direction: column;
+        max-width: 400px;
+      }
+      
+      .newsletter-input {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .newsletter-btn {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .cookie-consent {
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        max-width: 90%;
+      }
+      
+      .cookie-consent.visible {
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-description {
+        font-size: 1rem;
+      }
+      
+      .spline-container {
+        height: 400px;
+      }
+      
+      .section-title,
+      .impact-title {
+        font-size: 2rem;
+      }
+      
+      .impact-section,
+      .timeline-section,
+      .solutions-section,
+      .newsletter-section {
+        padding: 60px 20px;
+      }
+      
+      .impact-model {
+        height: 350px;
+      }
+
+      .impact-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .timeline-content {
+        padding: 20px;
+      }
+      
+      .timeline-title {
+        font-size: 1.2rem;
+      }
+      
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+      }
+      
+      .solution-card {
+        min-height: auto;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .footer-column h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .footer-contact {
+        justify-content: center;
+      }
+      
+      .footer-link a {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 12px 15px;
+      }
+      
+      .header.scrolled {
+        padding: 8px 15px;
+      }
+
+      .logo-text {
+        font-size: 1.2rem;
+      }
+
+      .logo-img {
+        height: 30px;
+        width: 30px;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-content {
+        padding: 0 15px;
+      }
+      
+      .cta-button {
+        width: 100%;
+        padding: 12px 20px;
+      }
+      
+      .timeline-content {
+        padding: 15px;
+      }
+      
+      .impact-model {
+        height: 300px;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
+      }
+      
+      .social-link {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .scroll-indicator-container {
+        bottom: 60px;
+      }
+      
+      .section-title, .impact-title {
+        font-size: 1.8rem;
+      }
+      
+      .section-subtitle, .impact-subtitle {
+        font-size: 1rem;
+        margin-bottom: 40px;
+      }
+      
+      .solution-card {
+        padding: 20px;
+      }
+      
+      .newsletter-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles Background -->
+  <div class="particles">
+    <div class="particle" style="top: 10%; left: 20%;"></div>
+    <div class="particle" style="top: 30%; left: 80%;"></div>
+    <div class="particle" style="top: 50%; left: 50%;"></div>
+    <div class="particle" style="top: 70%; left: 10%;"></div>
+    <div class="particle" style="top: 80%; left: 70%;"></div>
+    <div class="particle" style="top: 25%; left: 40%;"></div>
+    <div class="particle" style="top: 65%; left: 30%;"></div>
+    <div class="particle" style="top: 15%; left: 60%;"></div>
+    <div class="particle" style="top: 90%; left: 40%;"></div>
+    <div class="particle" style="top: 45%; left: 90%;"></div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Cookie Consent -->
+  <div class="cookie-consent" id="cookieConsent">
+    <div class="cookie-title">
+      <i class="fas fa-cookie-bite"></i>
+      <h3>Cookie Consent</h3>
+    </div>
+    <p class="cookie-text">We use cookies to enhance your browsing experience and analyze our traffic. By clicking "Accept", you consent to the use of cookies.</p>
+    <div class="cookie-buttons">
+      <button class="cookie-btn cookie-btn-accept" id="acceptCookies">Accept</button>
+      <button class="cookie-btn cookie-btn-settings">Settings</button>
+    </div>
+  </div>
+
+  <!-- Header with Logo and Nav -->
+  <header class="header" id="mainHeader">
+    <div class="logo-container">
+      <img src="https://media.licdn.com/dms/image/v2/C4E0BAQF5JMwkGeMn2g/company-logo_200_200/company-logo_200_200/0/1630587262386?e=2147483647&v=beta&t=6MwYI7xDGVH7G7YmB3lrbqcsRgPfSiBs2JxCI1TXbPY" alt="Robic Rufarm Logo" class="logo-img">
+      <h1 class="logo-text"><span class="logo-highlight">Robic</span> Rufarm</h1>
+    </div>
+    
+    <nav>
+      <div class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#impact" class="nav-link">Impact</a>
+        <a href="#solutions" class="nav-link">Solutions</a>
+        <a href="#journey" class="nav-link">Journey</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="home">
+    <div class="hero-content">
+      <div class="hero-subtitle">The Future of Farming</div>
+      <h1 class="hero-title">Reimagining Agriculture</h1>
+      <p class="hero-description">Empowering Indian farmers with AI-powered tools, precision farming solutions, and market intelligence for a sustainable future</p>
+      <!-- Change this line in your landing.html -->
+      <!-- Change this line in your landing.html -->
+<a href="{{ url_for('index') }}" class="cta-button">
+  <i class="fas fa-seedling"></i>
+  Explore Our Solutions
+</a>
+    </div>
+    <div class="spline-container">
+      <spline-viewer url="https://prod.spline.design/4qQjqRFKgc6AHeg8/scene.splinecode" loading="lazy"></spline-viewer>
+    </div>
+    <div class="scroll-indicator-container fade-in" id="scrollIndicator">
+      <a href="#impact">
+        <div class="oval-container">
+          <div class="oval-arrow"></div>
+        </div>
+      </a>
+    </div>
+  </section>
+  
+  <!-- Redesigned Impact Section with Left Model and Right Content -->
+  <section id="impact" class="impact-section">
+    <h2 class="impact-title fade-in">Our Impact</h2>
+    <p class="impact-subtitle fade-in">Transforming agriculture across India with innovative technology</p>
+    
+    <div class="impact-container">
+      <!-- Left: 3D Model -->
+      <div class="impact-model fade-in">
+        <spline-viewer url="https://prod.spline.design/Dei5gwOZjP-zXOyF/scene.splinecode" loading="lazy"></spline-viewer>
+      </div>
+      
+      <!-- Right: Impact Content -->
+      <div class="impact-content">
+        <div class="impact-stats fade-in">
+          <div class="stat-item">
+            <div class="stat-number">5,000+</div>
+            <div class="stat-label">Farmers Onboarded</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Pilot Villages</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-number">30%</div>
+            <div class="stat-label">Yield Increase</div>
+          </div>
+        </div>
+        
+        <p class="impact-text slide-in-right">
+          Our technology solutions have transformed thousands of farms across rural India, bringing modern agricultural practices to traditionally underserved communities. Through our AI-powered crop monitoring systems and precision farming tools, we've helped farmers increase their yields while using fewer resources.
+        </p>
+        
+        <a href="#" class="cta-button slide-in-right">
+          <i class="fas fa-chart-line"></i>
+          View Impact Report
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Solutions Section -->
+  <section id="solutions" class="solutions-section">
+    <h2 class="section-title text-center fade-in">Our Solutions</h2>
+    <p class="section-subtitle text-center fade-in">Innovative agricultural technologies designed for Indian farmers</p>
+    
+    <div class="solutions-grid">
+      <div class="solution-card fade-in">
+        <div class="solution-icon">
+          <i class="fas fa-satellite"></i>
+        </div>
+        <h3 class="solution-title">FarmSense™ Monitoring</h3>
+        <p class="solution-text">Advanced satellite and drone imagery analysis to monitor crop health, detect pests and diseases, and optimize resource allocation.</p>
+        <ul class="solution-features">
+          <li class="solution-feature">Early pest & disease detection</li>
+          <li class="solution-feature">Crop health visualization</li>
+          <li class="solution-feature">Yield prediction algorithms</li>
+          <li class="solution-feature">Custom alerts & notifications</li>
+        </ul>
+        <a href="#" class="solution-cta">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+      
+      <div class="solution-card fade-in">
+        <div class="solution-icon">
+          <i class="fas fa-tint"></i>
+        </div>
+        <h3 class="solution-title">SmartIrrigation System</h3>
+        <p class="solution-text">Precision water management system using IoT sensors, weather data, and AI to optimize irrigation schedules and reduce water usage.</p>
+        <ul class="solution-features">
+          <li class="solution-feature">Soil moisture monitoring</li>
+          <li class="solution-feature">Automated water scheduling</li>
+          <li class="solution-feature">Weather-based adjustments</li>
+          <li class="solution-feature">30% water usage reduction</li>
+        </ul>
+        <a href="#" class="solution-cta">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+      
+      <div class="solution-card fade-in">
+        <div class="solution-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 class="solution-title">FarmConnect App</h3>
+        <p class="solution-text">Mobile platform that connects farmers with buyers, provides market insights, and offers access to all our services in multiple languages.</p>
+        <ul class="solution-features">
+          <li class="solution-feature">Multilingual interface</li>
+          <li class="solution-feature">Direct market access</li>
+          <li class="solution-feature">Price trend analysis</li>
+          <li class="solution-feature">Voice-enabled commands</li>
+        </ul>
+        <a href="#" class="solution-cta">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section id="journey" class="timeline-section">
+    <h2 class="section-title text-center fade-in">Our Journey</h2>
+    <p class="section-subtitle text-center fade-in">Milestones in our mission to revolutionize Indian agriculture</p>
+    
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <div class="timeline-content">
+          <div class="timeline-date">January 2019</div>
+          <h3 class="timeline-title">Company Foundation</h3>
+          <p class="timeline-subtitle">Robic Rufarm Private Limited</p>
+          <ul class="timeline-points">
+            <li class="timeline-point">Established Robic Rufarm with a vision to revolutionize Indian agriculture through technology</li>
+            <li class="timeline-point">Assembled a team of experts in agronomy, engineering, and data science</li>
+            <li class="timeline-point">Conducted initial market research to identify key pain points for rural farmers</li>
+            <li class="timeline-point">Developed the company's mission statement and core objectives</li>
+          </ul>
+        </div>
+        <div class="timeline-icon">
+          <img src="https://img.icons8.com/color/96/000000/sprout.png" alt="Foundation">
+        </div>
+      </div>
+      
+      <div class="timeline-item fade-in">
+        <div class="timeline-content">
+          <div class="timeline-date">March 2020 - June 2020</div>
+          <h3 class="timeline-title">First AI Prototype</h3>
+          <p class="timeline-subtitle">Crop Monitoring System</p>
+          <ul class="timeline-points">
+            <li class="timeline-point">Designed and developed our first AI prototype for crop health monitoring</li>
+            <li class="timeline-point">Created models to analyze satellite imagery for early detection of pests and diseases</li>
+            <li class="timeline-point">Built a simple mobile app interface for farmers with multilingual support</li>
+            <li class="timeline-point">Tested the system with three local farming communities with promising results</li>
+          </ul>
+        </div>
+        <div class="timeline-icon">
+          <img src="https://img.icons8.com/color/96/000000/iot-sensor.png" alt="AI Prototype">
+        </div>
+      </div>
+      
+      <div class="timeline-item fade-in">
+        <div class="timeline-content">
+          <div class="timeline-date">January 2021 - April 2021</div>
+          <h3 class="timeline-title">Product Launch</h3>
+          <p class="timeline-subtitle">FarmSense Platform</p>
+          <ul class="timeline-points">
+            <li class="timeline-point">Officially launched our flagship FarmSense platform for comprehensive farm monitoring</li>
+            <li class="timeline-point">Integrated new features including automated alerts, yield predictions, and advisory services</li>
+            <li class="timeline-point">Partnered with 15 medium-sized farming communities across Telangana and Andhra Pradesh</li>
+            <li class="timeline-point">Achieved a 25% increase in productivity for early adopters</li>
+          </ul>
+        </div>
+        <div class="timeline-icon">
+          <img src="https://img.icons8.com/color/96/000000/rocket.png" alt="Product Launch">
+        </div>
+      </div>
+      
+      <div class="timeline-item fade-in">
+        <div class="timeline-content">
+          <div class="timeline-date">January 2023 - Present</div>
+          <h3 class="timeline-title">Expansion & Innovation</h3>
+          <p class="timeline-subtitle">Scaling Across Rural India</p>
+          <ul class="timeline-points">
+            <li class="timeline-point">Expanded operations to serve over 5,000 farmers across 20+ villages</li>
+            <li class="timeline-point">Introduced the new SmartIrrigation system for precision water management</li>
+            <li class="timeline-point">Secured strategic partnerships with agricultural universities for ongoing research</li>
+            <li class="timeline-point">Developed farmer-specific analytics to maximize yield while minimizing resource use</li>
+          </ul>
+        </div>
+        <div class="timeline-icon">
+          <img src="https://img.icons8.com/color/96/000000/growth.png" alt="Expansion">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <h2 class="newsletter-title fade-in">Stay Updated</h2>
+      <p class="newsletter-text fade-in">Subscribe to our newsletter for the latest agricultural technology updates and insights</p>
+      <form class="newsletter-form fade-in">
+        <input type="email" class="newsletter-input" placeholder="Your email address" required>
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="footer-content">
+      <div class="footer-column">
+        <img src="https://media.licdn.com/dms/image/v2/C4E0BAQF5JMwkGeMn2g/company-logo_200_200/company-logo_200_200/0/1630587262386?e=2147483647&v=beta&t=6MwYI7xDGVH7G7YmB3lrbqcsRgPfSiBs2JxCI1TXbPY" alt="Robic Rufarm Logo" class="footer-logo">
+        <p class="footer-text">Reimagining agriculture through sustainable practices, digital innovation, and farmer empowerment</p>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+          <li class="footer-link"><a href="#impact"><i class="fas fa-chart-line"></i> Our Impact</a></li>
+          <li class="footer-link"><a href="#solutions"><i class="fas fa-tools"></i> Solutions</a></li>
+          <li class="footer-link"><a href="#journey"><i class="fas fa-history"></i> Our Journey</a></li>
+          <li class="footer-link"><a href="#"><i class="fas fa-users"></i> About Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Our Solutions</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="#"><i class="fas fa-satellite"></i> FarmSense Monitoring</a></li>
+          <li class="footer-link"><a href="#"><i class="fas fa-tint"></i> SmartIrrigation System</a></li>
+          <li class="footer-link"><a href="#"><i class="fas fa-mobile-alt"></i> FarmConnect App</a></li>
+          <li class="footer-link"><a href="#"><i class="fas fa-university"></i> AgriKnowledge Platform</a></li>
+          <li class="footer-link"><a href="#"><i class="fas fa-handshake"></i> Market Access Program</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <div class="footer-contact">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>1st Floor, Agri Innovation Center, Hitech City, Hyderabad, Telangana 500081, India</div>
+        </div>
+        <div class="footer-contact">
+          <i class="fas fa-phone-alt"></i>
+          <div>+91 40 6678 9000</div>
+        </div>
+        <div class="footer-contact">
+          <i class="fas fa-envelope"></i>
+          <div>info@robicfarm.com</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="social-links">
+      <a href="#" class="social-link" aria-label="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a href="#" class="social-link" aria-label="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#" class="social-link" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="#" class="social-link" aria-label="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#" class="social-link" aria-label="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    
+    <p class="copyright">© 2025 Robic Rufarm Private Limited. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Show page after loading
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      
+      // Add timeout to ensure minimum loading spinner display
+      setTimeout(() => {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            loadingOverlay.classList.add('loaded');
+          }, 600);
+        });
+        
+        // Fallback if load event doesn't fire (e.g. cached content)
+        setTimeout(() => {
+          loadingOverlay.classList.add('loaded');
+        }, 2000);
+      }, 400);
+      
+      // Cookie Consent
+      const cookieConsent = document.getElementById('cookieConsent');
+      const acceptCookiesBtn = document.getElementById('acceptCookies');
+      
+      // Check if user has already accepted cookies
+      if (!localStorage.getItem('cookiesAccepted')) {
+        setTimeout(() => {
+          cookieConsent.classList.add('visible');
+        }, 2000);
+      }
+      
+      acceptCookiesBtn.addEventListener('click', () => {
+        localStorage.setItem('cookiesAccepted', 'true');
+        cookieConsent.classList.remove('visible');
+      });
+      
+      // Back to Top Button
+      const backToTopButton = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          backToTopButton.classList.add('visible');
+        } else {
+          backToTopButton.classList.remove('visible');
+        }
+      });
+      
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Scroll Indicator
+      const scrollIndicator = document.getElementById('scrollIndicator');
+
+      // Show scroll indicator after page loads
+      setTimeout(() => {
+        scrollIndicator.classList.add('visible');
+      }, 1000);
+
+      // Hide scroll indicator on scroll
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+          scrollIndicator.style.opacity = '0';
+        } else {
+          scrollIndicator.style.opacity = '1';
+        }
+      });
+
+      // Mobile Menu Toggle with improved animation
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      mobileMenuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        
+        const icon = mobileMenuBtn.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+      
+      // Theme Toggle with smooth transition
+      const themeToggle = document.getElementById('themeToggle');
+      
+      themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        
+        const icon = themeToggle.querySelector('i');
+        if (document.body.classList.contains('dark-mode')) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+        
+        // Save theme preference to localStorage
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+      });
+      
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('themePreference');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.querySelector('i').classList.remove('fa-moon');
+        themeToggle.querySelector('i').classList.add('fa-sun');
+      }
+      
+      // Improved Animation with Intersection Observer
+      const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Once the animation is complete, unobserve the element for better performance
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      animatedElements.forEach(element => {
+        observer.observe(element);
+      });
+      
+      // Optimized Number Animation
+      const statNumbers = document.querySelectorAll('.stat-number');
+      
+      const animateNumber = (element, duration = 1800) => {
+        const text = element.textContent;
+        const numericPart = parseInt(text.replace(/\D/g, ''));
+        const suffix = text.replace(/[0-9]/g, '');
+        
+        let startValue = 0;
+        const increment = Math.ceil(numericPart / (duration / 16));
+        let lastUpdateTime = 0;
+        
+        function updateNumber(timestamp) {
+          if (!lastUpdateTime) lastUpdateTime = timestamp;
+          const elapsed = timestamp - lastUpdateTime;
+          
+          if (elapsed > 16) { // Only update every ~16ms (60fps)
+            startValue += increment;
+            
+            if (startValue >= numericPart) {
+              element.textContent = numericPart + suffix;
+            } else {
+              element.textContent = startValue + suffix;
+              requestAnimationFrame(updateNumber);
+            }
+            lastUpdateTime = timestamp;
+          } else {
+            requestAnimationFrame(updateNumber);
+          }
+        }
+        
+        requestAnimationFrame(updateNumber);
+      };
+      
+      const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            animateNumber(element);
+            statObserver.unobserve(element);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      statNumbers.forEach(stat => {
+        statObserver.observe(stat);
+      });
+      
+      // Remove Spline branding with improved method
+      function removeSplineBranding() {
+        const style = document.createElement('style');
+        style.textContent = `
+          spline-viewer::part(logo),
+          spline-viewer::part(footer),
+          .spline-watermark,
+          .spline-builder,
+          [class*="watermark"],
+          [class*="branding"] {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            z-index: -9999 !important;
+          }
+        `;
+        document.head.appendChild(style);
+        
+        // Try to remove elements directly
+        setTimeout(() => {
+          document.querySelectorAll('[class*="watermark"], [class*="branding"]').forEach(el => {
+            if (el) el.remove();
+          });
+          
+          // Try to access shadow DOM
+          document.querySelectorAll('spline-viewer').forEach(viewer => {
+            if (viewer.shadowRoot) {
+              viewer.shadowRoot.querySelectorAll('[class*="watermark"], [class*="branding"]').forEach(el => {
+                if (el) el.remove();
+              });
+            }
+          });
+        }, 1500);
+      }
+      
+      // Call once on load and then periodically
+      removeSplineBranding();
+      setInterval(removeSplineBranding, 2000); // Some viewers load late, so we check periodically
+      
+      // Smooth scrolling with active state update
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            // Close mobile menu if open
+            if (navLinks.classList.contains('active')) {
+              navLinks.classList.remove('active');
+              mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+              mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            }
+            
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+            
+            // Update active navigation link
+            document.querySelectorAll('.nav-link').forEach(link => {
+              link.classList.remove('active');
+            });
+            
+            // Find nav link with matching href and make it active
+            document.querySelectorAll(`.nav-link[href="${targetId}"]`).forEach(link => {
+              link.classList.add('active');
+            });
+          }
+        });
+      });
+      
+      // Update active menu item on scroll
+      const sections = document.querySelectorAll('section[id]');
+      
+      function updateActiveMenu() {
+        const scrollPosition = window.scrollY + 100;
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 100;
+          const sectionHeight = section.offsetHeight;
+          const sectionId = section.getAttribute('id');
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+              link.classList.remove('active');
+            });
+            
+            document.querySelectorAll(`.nav-link[href="#${sectionId}"]`).forEach(link => {
+              link.classList.add('active');
+            });
+          }
+        });
+      }
+      
+      // Enhanced Header scroll effect with debouncing
+      const header = document.getElementById('mainHeader');
+      let lastScrollTop = 0;
+      let scrollTimeout;
+      
+      function handleScroll() {
+        if (scrollTimeout) {
+          window.cancelAnimationFrame(scrollTimeout);
+        }
+        
+        scrollTimeout = window.requestAnimationFrame(() => {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          // Update header appearance based on scroll position
+          if (scrollTop > 100) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+          
+          // Update active menu item
+          updateActiveMenu();
+          
+          lastScrollTop = scrollTop;
+        });
+      }
+      
+      window.addEventListener('scroll', handleScroll);
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const isClickInsideNav = e.target.closest('nav');
+        
+        if (!isClickInsideNav && navLinks.classList.contains('active')) {
+          navLinks.classList.remove('active');
+          const icon = mobileMenuBtn.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+      
+      // Newsletter Form Submission
+      const newsletterForm = document.querySelector('.newsletter-form');
+      
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const emailInput = this.querySelector('.newsletter-input');
+          
+          if (emailInput.value) {
+            // Simulate successful submission
+            this.innerHTML = '<div style="text-align: center; padding: 15px;"><i class="fas fa-check-circle" style="color: var(--success); font-size: 40px; margin-bottom: 15px;"></i><p style="color: var(--text-primary); font-weight: 600;">Thank you for subscribing!</p><p style="color: var(--text-secondary);">You\'ll receive our updates soon.</p></div>';
+          }
+        });
+      }
+      
+      // Preload Spline models for better performance
+      function preloadSplineModels() {
+        const modelUrls = [
+          "https://prod.spline.design/4qQjqRFKgc6AHeg8/scene.splinecode",
+          "https://prod.spline.design/Dei5gwOZjP-zXOyF/scene.splinecode"
+        ];
+        
+        modelUrls.forEach(url => {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.href = url;
+          link.as = 'fetch';
+          link.crossOrigin = 'anonymous';
+          document.head.appendChild(link);
+        });
+      }
+      
+      preloadSplineModels();
+      
+      // Add animated particles
+      function createParticles(count) {
+        const particles = document.querySelector('.particles');
+        
+        if (!particles) return;
+        
+        // Clear existing particles
+        particles.innerHTML = '';
+        
+        for (let i = 0; i < count; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          
+          // Random position
+          const top = Math.random() * 100;
+          const left = Math.random() * 100;
+          
+          // Random size (3px - 12px)
+          const size = 3 + Math.random() * 9;
+          
+          // Random animation duration (15s - 40s)
+          const duration = 15 + Math.random() * 25;
+          
+          // Random animation delay
+          const delay = Math.random() * 5;
+          
+          particle.style.top = `${top}%`;
+          particle.style.left = `${left}%`;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.animationDuration = `${duration}s`;
+          particle.style.animationDelay = `${delay}s`;
+          
+          // Determine particle color based on size
+          if (size < 5) {
+            particle.style.background = 'rgba(83, 100, 255, 0.2)'; // Primary
+          } else if (size < 8) {
+            particle.style.background = 'rgba(0, 200, 180, 0.2)'; // Secondary
+          } else {
+            particle.style.background = 'rgba(255, 107, 107, 0.2)'; // Accent
+          }
+          
+          particles.appendChild(particle);
+        }
+      }
+      
+      // Create particles (adjust count based on device)
+      const isMobile = window.innerWidth < 768;
+      createParticles(isMobile ? 15 : 30);
+      
+      // Handle resize events
+      window.addEventListener('resize', () => {
+        const newIsMobile = window.innerWidth < 768;
+        if (newIsMobile !== isMobile) {
+          createParticles(newIsMobile ? 15 : 30);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

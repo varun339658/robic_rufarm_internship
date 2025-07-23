@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Analysis Results | Aquaculture Health System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            /* Dark mode (default) */
+            --bg-color: #0a0a0a;
+            --card-bg: rgba(25, 25, 25, 0.7);
+            --card-border: #2a2a2a;
+            --text-primary: white;
+            --text-secondary: #aaa;
+            --text-muted: #777;
+            --input-bg: rgba(30, 30, 30, 0.6);
+            --input-border: #2a2a2a;
+            --divider-color: #333;
+            --icon-color: #888;
+            --purple-glow: rgba(102, 0, 197, 0.3);
+            --teal-glow: rgba(0, 170, 167, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            
+            /* Dashboard colors */
+            --primary: #6600c5;
+            --primary-light: #8a44e0;
+            --primary-dark: #4d00a0;
+            --secondary: #00aaa7;
+            --secondary-light: #2cd8d5;
+            --secondary-dark: #007d7a;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f9a825;
+        }
+
+        /* Light mode */
+        .light-mode {
+            --bg-color: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: #e0e0e0;
+            --text-primary: #111;
+            --text-secondary: #555;
+            --text-muted: #777;
+            --input-bg: rgba(240, 240, 240, 0.7);
+            --input-border: #ddd;
+            --divider-color: #ddd;
+            --icon-color: #666;
+            --purple-glow: rgba(102, 0, 197, 0.1);
+            --teal-glow: rgba(0, 170, 167, 0.1);
+            --social-icon-bg: #f8f8f8;
+            --social-icon-border: #e5e5e5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Glow effects */
+        .layer-blur {
+            height: 0;
+            width: 30rem;
+            position: fixed;
+            top: 20%;
+            right: -10%;
+            box-shadow: 0 0 700px 15px var(--purple-glow);
+            rotate: -30deg;
+            z-index: 0;
+        }
+
+        .layer-blur-2 {
+            height: 0;
+            width: 20rem;
+            position: fixed;
+            bottom: 20%;
+            left: -5%;
+            box-shadow: 0 0 500px 15px var(--teal-glow);
+            rotate: 30deg;
+            z-index: 0;
+        }
+
+        .accent-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.2;
+            transition: opacity 0.5s ease;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background-color: #6600c5;
+            top: -150px;
+            right: -150px;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background-color: #00aaa7;
+            bottom: -100px;
+            left: -100px;
+        }
+        
+        .light-mode .accent-circle {
+            opacity: 0.1;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px var(--purple-glow);
+        }
+        
+        .theme-toggle i {
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        /* Logo and Header */
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6600c5, #00aaa7);
+            box-shadow: 0 0 1px rgba(102, 0, 197, 0.5);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(102, 0, 197, 0.3);
+        }
+        
+        .logo-icon i {
+            font-size: 30px;
+            color: white;
+        }
+
+        /* Gradient text animation */
+        .gradient {
+            background: linear-gradient(to right, #00aaa7, #7e42a7, #6600c5, #6070fd, #2a46ff, #0099ff, #008ead);
+            background-size: 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animate-gradient 2.5s linear infinite;
+        }
+
+        @keyframes animate-gradient {
+            to {
+                background-position: 200%;
+            }
+        }
+
+        /* Button styles */
+        .refresh-btn {
+            padding: 10px 18px;
+            background: linear-gradient(90deg, #00aaa7, #6600c5);
+            background-size: 200%;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 0, 197, 0.4);
+        }
+        
+        .refresh-btn i {
+            margin-right: 8px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--purple-glow);
+            border-color: #6600c5;
+        }
+
+        /* Status pills */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-pill.healthy {
+            background-color: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+
+        .status-pill.unhealthy {
+            background-color: rgba(198, 40, 40, 0.1);
+            color: var(--danger);
+        }
+
+        .status-pill.wssv {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #ff9800;
+        }
+
+        .status-pill.blackgill {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: #9c27b0;
+        }
+
+        .status-pill.unknown {
+            background-color: rgba(96, 125, 139, 0.1);
+            color: var(--text-muted);
+        }
+
+        .status-pill i {
+            margin-right: 6px;
+            font-size: 0.625rem;
+        }
+
+        /* Section header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        /* Custom tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background-color: rgba(30, 30, 30, 0.3);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 6px;
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--divider-color);
+            color: var(--text-primary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            background-color: rgba(30, 30, 30, 0.2);
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid var(--card-border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--purple-glow);
+            border-color: #6600c5;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            color: var(--primary);
+            transition: color 0.3s ease;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-light);
+        }
+        
+        /* Health Distribution Chart */
+        .health-chart-container {
+            height: 250px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .stat-card {
+                margin-bottom: 10px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .section-header .refresh-btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="layer-blur"></div>
+    <div class="layer-blur-2"></div>
+    <div class="accent-circle circle-1"></div>
+    <div class="accent-circle circle-2"></div>
+    
+    <!-- Theme toggle button -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-6 fade-in">
+            <div class="flex items-center">
+                <div class="logo-icon mr-4">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <div>
+                    <h1 class="gradient text-2xl font-bold">BATCH ANALYSIS RESULTS</h1>
+                    <p class="text-sm" style="color: var(--text-secondary);">ROBIC RUFARM AQUACULTURE MONITORING</p>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/" class="refresh-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/upload_form" class="refresh-btn">
+                    <i class="fas fa-upload"></i>
+                    <span>New Batch</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Batch Summary -->
+        <div class="card fade-in">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Batch Information</span>
+                </div>
+                <a href="{{ url_for('generate_batch_report', batch_id=batch_id) }}" class="refresh-btn">
+                    <i class="fas fa-file-download"></i>
+                    <span>Download Report</span>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="stat-card">
+                    <div class="text-sm" style="color: var(--text-secondary); margin-bottom: 8px;">Batch ID</div>
+                    <div class="text-md" style="color: var(--text-primary);">{{ batch_id }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm" style="color: var(--text-secondary); margin-bottom: 8px;">Farm ID</div>
+                    <div class="text-md" style="color: var(--text-primary);">{{ farm_id if farm_id else 'Not provided' }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm" style="color: var(--text-secondary); margin-bottom: 8px;">Farm Name</div>
+                    <div class="text-md" style="color: var(--text-primary);">{{ farm_name if farm_name else 'Not provided' }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm" style="color: var(--text-secondary); margin-bottom: 8px;">Specimen Type</div>
+                    <div class="text-md capitalize" style="color: var(--text-primary);">{{ specimen_type }}</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="stat-card">
+                    <div class="stat-value">{{ batch_summary.total_count }}</div>
+                    <div class="stat-label">Total Samples</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--success);">{{ batch_summary.healthy_count }}</div>
+                    <div class="stat-label">Healthy ({{ "%.1f"|format(batch_summary.percentage_healthy) }}%)</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--danger);">{{ batch_summary.unhealthy_count }}</div>
+                    <div class="stat-label">Unhealthy ({{ "%.1f"|format(100 - batch_summary.percentage_healthy) }}%)</div>
+                </div>
+            </div>
+            
+            <!-- Health Distribution Chart -->
+            <div class="health-chart-container">
+                <canvas id="healthDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Batch Records List -->
+        <div class="card fade-in">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-list"></i>
+                    <span>Specimen Records ({{ records|length }})</span>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Image</th>
+                            <th>Health Status</th>
+                            <th>{% if specimen_type == 'shrimp' %}Confidence{% else %}Status{% endif %}</th>
+                            <th>Date & Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>
+                                <img src="{{ record.image_url }}" alt="Specimen" class="h-12 w-12 rounded-md object-cover cursor-pointer preview-image" data-image="{{ record.image_url }}">
+                            </td>
+                            <td>
+                                {% if record.health_status == 'Healthy' %}
+                                <span class="status-pill healthy">
+                                    <i class="fas fa-check-circle"></i> {{ record.health_status }}
+                                </span>
+                                {% elif record.health_status == 'Wssv' %}
+                                <span class="status-pill wssv">
+                                    <i class="fas fa-exclamation-triangle"></i> {{ record.health_status }}
+                                </span>
+                                {% elif record.health_status == 'Blackgill' %}
+                                <span class="status-pill blackgill">
+                                    <i class="fas fa-exclamation-circle"></i> {{ record.health_status }}
+                                </span>
+                                {% else %}
+                                <span class="status-pill unhealthy">
+                                    <i class="fas fa-times-circle"></i> {{ record.health_status }}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if specimen_type == 'shrimp' and record.confidence != 'N/A' %}
+                                    <div class="flex items-center">
+                                        <span class="mr-2">{{ (record.confidence * 100)|round(1) }}%</span>
+                                        <div class="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full 
+                                                {% if record.confidence >= 0.7 %}bg-green-500
+                                                {% elif record.confidence >= 0.4 %}bg-yellow-500
+                                                {% else %}bg-red-500{% endif %}"
+                                                style="width: {{ (record.confidence * 100)|round(1) }}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {{ record.health_status }}
+                                {% endif %}
+                            </td>
+                            <td>{{ record.timestamp }}</td>
+                            <td>
+                                <a href="{{ url_for('result', analysis_type=specimen_type, record_id=record.id) }}" class="action-btn" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('generate_report', analysis_type=specimen_type, record_id=record.id) }}" class="action-btn" title="Download Report">
+                                    <i class="fas fa-file-download"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% if records|length == 0 %}
+                        <tr>
+                            <td colspan="6" class="py-4 text-center" style="color: var(--text-secondary);">
+                                No records found in this batch.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card fade-in">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Health Recommendations</span>
+                </div>
+            </div>
+            
+            <div style="color: var(--text-primary);">
+                {% if specimen_type == 'shrimp' %}
+                    {% if 'Wssv' in disease_breakdown and disease_breakdown['Wssv'] > 0 %}
+                        <h3 style="color: #ff9800; font-size: 1.25rem; margin-bottom: 0.5rem;">WSSV Detected ({{ disease_breakdown['Wssv'] }} specimens)</h3>
+                        <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.25rem;">Apply immunostimulants like beta-glucans</li>
+                            <li style="margin-bottom: 0.25rem;">Maintain optimum pond salinity</li>
+                            <li style="margin-bottom: 0.25rem;">Disinfect with chlorine-based products</li>
+                            <li style="margin-bottom: 0.25rem;">Avoid sudden temperature drops</li>
+                        </ul>
+                    {% endif %}
+                    
+                    {% if 'Blackgill' in disease_breakdown and disease_breakdown['Blackgill'] > 0 %}
+                        <h3 style="color: #9c27b0; font-size: 1.25rem; margin-bottom: 0.5rem;">Blackgill Detected ({{ disease_breakdown['Blackgill'] }} specimens)</h3>
+                        <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.25rem;">Improve water quality</li>
+                            <li style="margin-bottom: 0.25rem;">Increase aeration</li>
+                            <li style="margin-bottom: 0.25rem;">Reduce organic load and remove sludge</li>
+                            <li style="margin-bottom: 0.25rem;">Use probiotic treatments</li>
+                        </ul>
+                    {% endif %}
+                {% elif specimen_type == 'fish' and batch_summary.unhealthy_count > 0 %}
+                    <h3 style="color: var(--danger); font-size: 1.25rem; margin-bottom: 0.5rem;">Unhealthy Fish Detected ({{ batch_summary.unhealthy_count }} specimens)</h3>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li style="margin-bottom: 0.25rem;">Quarantine affected fish</li>
+                        <li style="margin-bottom: 0.25rem;">Improve water parameters</li>
+                        <li style="margin-bottom: 0.25rem;">Consult with a fish health specialist</li>
+                        <li style="margin-bottom: 0.25rem;">Monitor feed quality and feeding protocols</li>
+                    </ul>
+                {% endif %}
+                
+                <h3 style="color: var(--secondary); font-size: 1.25rem; margin-bottom: 0.5rem; margin-top: 1rem;">General Recommendations</h3>
+                <ul style="list-style-type: disc; margin-left: 1.5rem;">
+                    <li style="margin-bottom: 0.25rem;">Continue regular health monitoring</li>
+                    <li style="margin-bottom: 0.25rem;">Maintain optimal water quality parameters</li>
+                    <li style="margin-bottom: 0.25rem;">Implement biosecurity measures</li>
+                    <li style="margin-bottom: 0.25rem;">Schedule follow-up analysis in 7-10 days</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Actions and Next Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 fade-in">
+            <div class="card">
+                <div class="section-title mb-4">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Batch Analysis Benefits</span>
+                </div>
+                <p style="color: var(--text-primary);">
+                    Batch analysis allows you to process multiple specimens at once, saving time and providing
+                    comprehensive insights into the overall health of your aquaculture system. Download the 
+                    batch report for a complete summary with statistics and recommendations.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="section-title mb-4">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>Next Steps</span>
+                </div>
+                <p style="color: var(--text-primary); margin-bottom: 1rem;">
+                    Review individual specimens by clicking on the View button, or process a new batch of images
+                    to continue monitoring the health of your aquaculture system.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="/" class="refresh-btn">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/upload_form" class="refresh-btn">
+                        <i class="fas fa-upload"></i>
+                        <span>New Batch</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Preview Modal -->
+        <div id="image-preview-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+            <div style="position: relative; max-width: 90%; max-height: 90%;">
+                <img id="preview-image-large" src="" alt="Preview" style="max-width: 100%; max-height: 90vh; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+                <button id="close-preview" style="position: absolute; top: -20px; right: -20px; background-color: var(--card-bg); border: none; width: 40px; height: 40px; border-radius: 50%; color: var(--text-primary); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center py-6" style="color: var(--text-muted); font-size: 0.875rem;">
+            <p>&copy; 2025 Robic Rufarm | Aquaculture Monitoring System</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            
+            // Change icon based on theme
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+            
+            // Update chart colors
+            updateChartTheme();
+        });
+        
+        // Check for user's preferred color scheme
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.body.classList.add('light-mode');
+            themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+        }
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeHealthChart();
+            setupImagePreview();
+            handleScrollAnimation(); // Initial check for scroll animations
+        });
+
+        // Initialize Health Distribution Chart
+        function initializeHealthChart() {
+            const ctx = document.getElementById('healthDistributionChart').getContext('2d');
+            
+            // Set chart options for dark/light mode compatibility
+            // Set chart options for dark/light mode compatibility
+            Chart.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-secondary');
+            Chart.defaults.borderColor = getComputedStyle(document.body).getPropertyValue('--divider-color');
+            
+            // Prepare data for the chart
+            const labels = [];
+            const data = [];
+            const backgroundColor = [];
+            
+            // Add healthy count
+            labels.push('Healthy');
+            data.push({{ batch_summary.healthy_count }});
+            backgroundColor.push('#2e7d32'); // Green
+            
+            // Add disease breakdown if it exists
+            {% if specimen_type == 'shrimp' %}
+                {% if 'Wssv' in disease_breakdown and disease_breakdown['Wssv'] > 0 %}
+                    labels.push('WSSV');
+                    data.push({{ disease_breakdown['Wssv'] }});
+                    backgroundColor.push('#ff9800'); // Orange
+                {% endif %}
+                
+                {% if 'Blackgill' in disease_breakdown and disease_breakdown['Blackgill'] > 0 %}
+                    labels.push('Blackgill');
+                    data.push({{ disease_breakdown['Blackgill'] }});
+                    backgroundColor.push('#9c27b0'); // Purple
+                {% endif %}
+            {% else %}
+                // For fish or other specimen types
+                {% if batch_summary.unhealthy_count > 0 %}
+                    labels.push('Unhealthy');
+                    data.push({{ batch_summary.unhealthy_count }});
+                    backgroundColor.push('#c62828'); // Red
+                {% endif %}
+            {% endif %}
+            
+            // Create the chart
+            window.healthChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: 'transparent',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-secondary')
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(25, 25, 25, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(102, 0, 197, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // Update chart theme when theme changes
+        function updateChartTheme() {
+            Chart.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-secondary');
+            Chart.defaults.borderColor = getComputedStyle(document.body).getPropertyValue('--divider-color');
+            
+            if (window.healthChart) {
+                // Update legend text color
+                window.healthChart.options.plugins.legend.labels.color = getComputedStyle(document.body).getPropertyValue('--text-secondary');
+                
+                // Update tooltip style based on theme
+                window.healthChart.options.plugins.tooltip.backgroundColor = document.body.classList.contains('light-mode') ? 
+                    'rgba(255, 255, 255, 0.9)' : 'rgba(25, 25, 25, 0.9)';
+                window.healthChart.options.plugins.tooltip.titleColor = document.body.classList.contains('light-mode') ? 
+                    '#333' : '#fff';
+                window.healthChart.options.plugins.tooltip.bodyColor = document.body.classList.contains('light-mode') ? 
+                    '#333' : '#fff';
+                
+                window.healthChart.update();
+            }
+        }
+  
+        // Setup image preview functionality
+        function setupImagePreview() {
+            const previewImages = document.querySelectorAll('.preview-image');
+            const modal = document.getElementById('image-preview-modal');
+            const modalImg = document.getElementById('preview-image-large');
+            const closeBtn = document.getElementById('close-preview');
+            
+            previewImages.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'flex';
+                    modalImg.src = this.getAttribute('data-image');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                });
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // Restore scrolling
+            });
+            
+            // Close modal when clicking outside the image
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close modal with escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+  
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+  
+        // Animate elements on scroll
+        const fadeElems = document.querySelectorAll('.card');
+  
+        // Function to check if element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+                rect.bottom >= 0
+            );
+        }
+  
+        // Function to handle scroll animation
+        function handleScrollAnimation() {
+            fadeElems.forEach(elem => {
+                if (isInViewport(elem) && !elem.classList.contains('fade-in')) {
+                    elem.classList.add('fade-in');
+                }
+            });
+        }
+  
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScrollAnimation);
+    </script>
+</body>
+</html>

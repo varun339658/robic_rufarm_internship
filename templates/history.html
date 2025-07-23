@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis History | Aquaculture Health System</title>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+          /* Dark mode (default) */
+          --bg-color: #0a0a0a;
+          --card-bg: rgba(25, 25, 25, 0.7);
+          --card-border: #2a2a2a;
+          --text-primary: white;
+          --text-secondary: #aaa;
+          --text-muted: #777;
+          --input-bg: rgba(30, 30, 30, 0.6);
+          --input-border: #2a2a2a;
+          --divider-color: #333;
+          --icon-color: #888;
+          --purple-glow: rgba(102, 0, 197, 0.3);
+          --teal-glow: rgba(0, 170, 167, 0.2);
+          --social-icon-bg: #222;
+          --social-icon-border: #333;
+          --shadow-color: rgba(0, 0, 0, 0.3);
+          
+          /* Dashboard colors */
+          --primary: #6600c5;
+          --primary-light: #8a44e0;
+          --primary-dark: #4d00a0;
+          --secondary: #00aaa7;
+          --secondary-light: #2cd8d5;
+          --secondary-dark: #007d7a;
+          --success: #2e7d32;
+          --danger: #c62828;
+          --warning: #f9a825;
+        }
+        
+        /* Light mode */
+        .light-mode {
+          --bg-color: #f5f5f7;
+          --card-bg: rgba(255, 255, 255, 0.85);
+          --card-border: #e0e0e0;
+          --text-primary: #111;
+          --text-secondary: #555;
+          --text-muted: #777;
+          --input-bg: rgba(240, 240, 240, 0.7);
+          --input-border: #ddd;
+          --divider-color: #ddd;
+          --icon-color: #666;
+          --purple-glow: rgba(102, 0, 197, 0.1);
+          --teal-glow: rgba(0, 170, 167, 0.1);
+          --social-icon-bg: #f8f8f8;
+          --social-icon-border: #e5e5e5;
+          --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        body {
+          background-color: var(--bg-color);
+          min-height: 100vh;
+          margin: 0;
+          padding: 20px;
+          position: relative;
+          overflow-x: hidden;
+        }
+        
+        /* Glow effects */
+        .layer-blur {
+          height: 0;
+          width: 30rem;
+          position: fixed;
+          top: 20%;
+          right: -10%;
+          box-shadow: 0 0 700px 15px var(--purple-glow);
+          rotate: -30deg;
+          z-index: 0;
+        }
+        
+        .layer-blur-2 {
+          height: 0;
+          width: 20rem;
+          position: fixed;
+          bottom: 20%;
+          left: -5%;
+          box-shadow: 0 0 500px 15px var(--teal-glow);
+          rotate: 30deg;
+          z-index: 0;
+        }
+        
+        .accent-circle {
+          position: fixed;
+          border-radius: 50%;
+          filter: blur(80px);
+          z-index: -1;
+          opacity: 0.2;
+          transition: opacity 0.5s ease;
+        }
+        
+        .circle-1 {
+          width: 300px;
+          height: 300px;
+          background-color: #6600c5;
+          top: -150px;
+          right: -150px;
+        }
+        
+        .circle-2 {
+          width: 200px;
+          height: 200px;
+          background-color: #00aaa7;
+          bottom: -100px;
+          left: -100px;
+        }
+        
+        .light-mode .accent-circle {
+          opacity: 0.1;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: var(--card-bg);
+          border: 1px solid var(--card-border);
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 100;
+          box-shadow: 0 4px 10px var(--shadow-color);
+          transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 15px var(--purple-glow);
+        }
+        
+        .theme-toggle i {
+          font-size: 24px;
+          color: var(--text-primary);
+        }
+        
+        /* Container */
+        .container {
+          max-width: 1600px; /* Wider container */
+          margin: 0 auto;
+          position: relative;
+          z-index: 1;
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 30px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid var(--card-border);
+        }
+        
+        .logo-title-container {
+          display: flex;
+          align-items: center;
+        }
+        
+        .logo-icon {
+          width: 60px;
+          height: 60px;
+          margin-right: 16px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #6600c5, #00aaa7);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+          transition: all 0.3s ease;
+          border: 2px solid rgba(102, 0, 197, 0.3);
+        }
+        
+        .logo-icon i {
+          font-size: 30px;
+          color: white;
+        }
+        
+        .title-text {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        /* Gradient text animation */
+        .gradient {
+          background: linear-gradient(to right, #00aaa7, #7e42a7, #6600c5, #6070fd, #2a46ff, #0099ff, #008ead);
+          background-size: 200%;
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: animate-gradient 2.5s linear infinite;
+        }
+        
+        @keyframes animate-gradient {
+          to {
+            background-position: 200%;
+          }
+        }
+        
+        .dashboard-title {
+          color: var(--text-primary);
+          font-size: 1.8rem;
+          font-weight: 600;
+          letter-spacing: 1px;
+        }
+        
+        .company-subtitle {
+          color: var(--text-muted);
+          font-size: 0.9rem;
+          margin-top: 2px;
+          letter-spacing: 1px;
+        }
+        
+        /* Bento grid layout - Modified for fixed sidebar */
+        .bento-container {
+          display: grid;
+          grid-template-columns: 240px 1fr; /* Fixed sidebar width */
+          gap: 25px;
+          width: 100%;
+          z-index: 1;
+        }
+        
+        .bento-item {
+          background-color: var(--card-bg);
+          border-radius: 20px;
+          border: 1px solid var(--card-border);
+          padding: 24px;
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bento-item:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 30px var(--purple-glow);
+          border-color: #6600c5;
+        }
+        
+        /* Sidebar - Fixed position */
+        .sidebar-item {
+          grid-column: 1;
+          grid-row: 1 / span 4; /* Span all rows */
+          position: sticky;
+          top: 20px;
+          height: calc(100vh - 40px);
+          overflow-y: auto;
+          max-width: 240px;
+          padding: 20px;
+          border-right: 1px solid var(--card-border);
+        }
+        
+        .sidebar-brand {
+          font-size: 1.3rem;
+          font-weight: 600;
+          margin-bottom: 24px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid var(--card-border);
+          display: flex;
+          align-items: center;
+          color: var(--text-primary);
+        }
+        
+        .sidebar-brand i {
+          margin-right: 10px;
+          font-size: 1.4rem;
+          color: var(--secondary);
+        }
+        
+        .sidebar-menu {
+          list-style: none;
+        }
+        
+        .sidebar-menu-item {
+          margin-bottom: 8px;
+        }
+        
+        .sidebar-menu-link {
+          display: flex;
+          align-items: center;
+          color: var(--text-secondary);
+          text-decoration: none;
+          padding: 12px;
+          border-radius: 10px;
+          transition: all 0.3s ease;
+          font-size: 0.95rem;
+        }
+        
+        .sidebar-menu-link:hover, .sidebar-menu-link.active {
+          background: linear-gradient(90deg, rgba(102, 0, 197, 0.1), rgba(0, 170, 167, 0.1));
+          color: var(--text-primary);
+        }
+        
+        .sidebar-menu-link.active {
+          border-left: 3px solid #6600c5;
+        }
+        
+        .sidebar-menu-link i {
+          margin-right: 10px;
+          width: 20px;
+          text-align: center;
+          font-size: 1.1rem;
+        }
+        
+        /* Content sections - Adjusted to fit with sidebar */
+        .filters-item, .table-item, .export-item, .stats-item, .batch-item {
+          grid-column: 2; /* All in the second column */
+        }
+        
+        /* Filters section */
+        .filters-item {
+          grid-row: 1;
+        }
+        
+        /* Table section */
+        .table-item {
+          grid-row: 2;
+        }
+        
+        /* Export section */
+        .export-item {
+          grid-row: 3;
+          padding: 30px;
+        }
+        
+        /* Stats section */
+        .stats-item {
+          grid-column: 2;
+          grid-row: 4;
+        }
+        
+        /* Batch processing */
+        .batch-item {
+          grid-column: 2;
+          grid-row: 5;
+        }
+        
+        /* Section heading */
+        .section-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          padding-bottom: 10px;
+          border-bottom: 1px solid var(--card-border);
+        }
+        
+        .section-title i {
+          margin-right: 10px;
+          color: var(--secondary);
+          font-size: 1.3rem;
+        }
+        
+        /* Export section specific styling */
+        .export-item .section-title {
+          font-size: 1.3rem;
+          margin-bottom: 25px;
+        }
+        
+        .export-item .section-title i {
+          font-size: 1.4rem;
+          color: #00c2bf; /* Brighter color for emphasis */
+        }
+        
+        /* Filter controls */
+        .filter-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 15px;
+        }
+        
+        .filter-group {
+          margin-bottom: 15px;
+        }
+        
+        .filter-label {
+          display: block;
+          margin-bottom: 5px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: var(--text-secondary);
+        }
+        
+        .select-wrapper {
+          position: relative;
+        }
+        
+        .select-wrapper::after {
+          content: '\f078';
+          font-family: 'Font Awesome 5 Free';
+          font-weight: 900;
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+          pointer-events: none;
+        }
+        
+        .filter-select, .filter-input {
+          width: 100%;
+          padding: 10px 12px;
+          background-color: var(--input-bg);
+          border: 1px solid var(--input-border);
+          border-radius: 10px;
+          color: var(--text-primary);
+          appearance: none;
+          outline: none;
+          transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus, .filter-input:focus {
+          border-color: var(--primary);
+          box-shadow: 0 0 0 2px var(--purple-glow);
+        }
+        
+        /* Table styles */
+        .table-container {
+          margin-top: 15px;
+          overflow-x: auto;
+          border-radius: 10px;
+          border: 1px solid var(--card-border);
+        }
+        
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        
+        thead th {
+          background-color: rgba(30, 30, 30, 0.3);
+          color: var(--text-secondary);
+          font-weight: 500;
+          padding: 15px;
+          text-align: left;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        thead th:hover {
+          background-color: rgba(102, 0, 197, 0.1);
+        }
+        
+        tbody tr {
+          border-bottom: 1px solid var(--divider-color);
+          transition: all 0.3s ease;
+        }
+        
+        tbody tr:last-child {
+          border-bottom: none;
+        }
+        
+        tbody tr:hover {
+          background-color: rgba(102, 0, 197, 0.05);
+        }
+        
+        tbody td {
+          padding: 15px;
+          color: var(--text-primary);
+        }
+        
+        /* Status pills */
+        .status-pill {
+          display: inline-flex;
+          align-items: center;
+          padding: 5px 10px;
+          border-radius: 50px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+        
+        .status-pill.healthy {
+          background-color: rgba(46, 125, 50, 0.1);
+          color: var(--success);
+        }
+        
+        .status-pill.unhealthy {
+          background-color: rgba(198, 40, 40, 0.1);
+          color: var(--danger);
+        }
+        
+        .status-pill.wssv {
+          background-color: rgba(249, 168, 37, 0.1);
+          color: var(--warning);
+        }
+        
+        .status-pill.blackgill {
+          background-color: rgba(136, 84, 208, 0.1);
+          color: var(--primary);
+        }
+        
+        .status-pill i {
+          margin-right: 5px;
+        }
+        
+        /* Action buttons */
+        .action-btn {
+          display: inline-flex;
+          align-items: center;
+          color: var(--primary);
+          background: none;
+          border: none;
+          padding: 5px 10px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 0.9rem;
+          text-decoration: none;
+        }
+        
+        .action-btn:hover {
+          color: var(--primary-light);
+        }
+        
+        .action-btn i {
+          margin-right: 5px;
+        }
+        
+        /* Pagination */
+        .pagination {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 20px;
+        }
+        
+        .page-info {
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+        }
+        
+        .page-controls {
+          display: flex;
+          align-items: center;
+        }
+        
+        .page-size-select {
+          margin-right: 15px;
+          padding: 5px 10px;
+          background-color: var(--input-bg);
+          border: 1px solid var(--input-border);
+          border-radius: 8px;
+          color: var(--text-primary);
+          outline: none;
+        }
+        
+        .page-buttons {
+          display: flex;
+          border-radius: 10px;
+          overflow: hidden;
+          border: 1px solid var(--input-border);
+        }
+        
+        .page-buttons button {
+          background-color: var(--input-bg);
+          border: none;
+          color: var(--text-primary);
+          padding: 8px 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .page-buttons button:hover:not(:disabled) {
+          background-color: rgba(102, 0, 197, 0.1);
+        }
+        
+        .page-buttons button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        
+        .page-indicator {
+          background-color: var(--input-bg);
+          padding: 8px 12px;
+          color: var(--text-primary);
+          border-left: 1px solid var(--input-border);
+          border-right: 1px solid var(--input-border);
+        }
+        
+        /* Export grid - Enhanced */
+        .export-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 30px; /* Larger gap for better spacing */
+          margin: 10px 0 20px 0;
+        }
+        
+        .export-card {
+          background-color: rgba(30, 30, 30, 0.6); /* Slightly darker for contrast */
+          border: 1px solid var(--card-border);
+          border-radius: 16px;
+          padding: 30px; /* More padding */
+          transition: all 0.3s ease;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .export-card:hover {
+          transform: translateY(-5px);
+          border-color: var(--secondary);
+          box-shadow: 0 15px 30px var(--teal-glow);
+        }
+        
+        .export-card-header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 24px;
+        }
+        
+        .export-card-icon {
+          width: 56px; /* Larger icon */
+          height: 56px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 18px;
+          font-size: 1.4rem;
+          background: rgba(20, 20, 20, 0.7);
+          border: 1px solid var(--card-border);
+          box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .export-card-title {
+          font-weight: 600;
+          color: var(--text-primary);
+          font-size: 1.25rem;
+          letter-spacing: 0.3px;
+        }
+        
+        .export-card-text {
+          color: var(--text-secondary);
+          font-size: 1rem;
+          margin-bottom: 25px;
+          line-height: 1.6;
+          flex-grow: 1;
+        }
+        
+        /* Stats grid */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px; /* Increased gap */
+        }
+        
+        .stat-card {
+          background-color: var(--card-bg);
+          border: 1px solid var(--card-border);
+          border-radius: 15px;
+          padding: 20px; /* More padding */
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+          transform: translateY(-3px);
+          border-color: var(--primary);
+          box-shadow: 0 10px 20px var(--purple-glow);
+        }
+        
+        .stat-value {
+          font-size: 2rem; /* Larger value */
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+        
+        .healthy-value {
+          color: var(--success);
+        }
+        
+        .unhealthy-value {
+          color: var(--danger);
+        }
+        
+        .shrimp-value {
+          color: var(--secondary);
+        }
+        
+        .fish-value {
+          color: var(--primary);
+        }
+        
+        .stat-label {
+          font-size: 0.9rem; /* Larger label */
+          color: var(--text-secondary);
+        }
+        
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 20px; /* More padding */
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 1rem; /* Larger font */
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+          width: 100%;
+        }
+        
+        .btn i {
+          margin-right: 10px;
+          font-size: 1.1rem;
+        }
+        
+        .btn-primary {
+          background: linear-gradient(90deg, var(--secondary), var(--primary));
+          color: white;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 0, 197, 0.4);
+        }
+        
+        .btn-green {
+          background: linear-gradient(135deg, #2e7d32, #1b5e20);
+          color: white;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-green:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+        
+        .btn-blue {
+          background: linear-gradient(135deg, #1976d2, #0d47a1);
+          color: white;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-blue:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+        }
+        
+        .btn-purple {
+          background: linear-gradient(135deg, #7b1fa2, #4a148c);
+          color: white;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-purple:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4);
+        }
+        
+        .btn-refresh {
+          padding: 12px 24px;
+          background: linear-gradient(90deg, #00aaa7, #6600c5);
+          background-size: 200%;
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .btn-refresh:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(102, 0, 197, 0.4);
+        }
+        
+        .btn-refresh i {
+          margin-right: 10px;
+        }
+        
+        /* Batch processing */
+        .batch-buttons {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 20px; /* Increased gap */
+        }
+        
+        /* Notification */
+        .notification {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background-color: var(--card-bg);
+          border: 1px solid var(--card-border);
+          border-radius: 10px;
+          padding: 15px 20px;
+          display: flex;
+          align-items: center;
+          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          transform: translateY(100px);
+          opacity: 0;
+          transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        
+        .notification i {
+          margin-right: 12px;
+          font-size: 1.2rem;
+        }
+        
+        .notification-message {
+          color: var(--text-primary);
+          font-size: 0.9rem;
+        }
+        
+        .notification-close {
+          margin-left: 15px;
+          color: var(--text-muted);
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* Loading indicator */
+        .loading-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 50px 0;
+        }
+        
+        .loading-spinner {
+          width: 50px;
+          height: 50px;
+          border: 3px solid rgba(102, 0, 197, 0.2);
+          border-radius: 50%;
+          border-top-color: var(--primary);
+          animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+          margin-top: 15px;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+        }
+        
+        /* Checkbox styling */
+        .custom-checkbox {
+          width: 18px;
+          height: 18px;
+          margin-right: 10px;
+          appearance: none;
+          border: 2px solid var(--text-muted);
+          border-radius: 4px;
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s ease;
+        }
+        
+        .custom-checkbox:checked {
+          background-color: var(--primary);
+          border-color: var(--primary);
+        }
+        
+        .custom-checkbox:checked::after {
+          content: '\f00c';
+          font-family: 'Font Awesome 5 Free';
+          font-weight: 900;
+          color: white;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 0.7rem;
+        }
+        
+        /* Footer */
+        .footer {
+          margin-top: 30px;
+          text-align: center;
+          color: var(--text-muted);
+          font-size: 0.85rem;
+          padding: 20px 0;
+          grid-column: 1 / -1; /* Span all columns */
+        }
+        
+        .footer a {
+          color: var(--text-secondary);
+          text-decoration: none;
+          margin: 0 10px;
+          transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+          color: var(--primary);
+        }
+        
+        /* Skeleton loading animation */
+        .skeleton {
+          background: linear-gradient(90deg, var(--card-bg) 25%, rgba(102, 0, 197, 0.1) 50%, var(--card-bg) 75%);
+          background-size: 200% 100%;
+          animation: loading 1.5s infinite;
+          border-radius: 4px;
+          height: 20px;
+        }
+        
+        @keyframes loading {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+        
+        /* Fade-in animation */
+        .fade-in {
+          animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Mobile optimizations - Revised for new grid layout */
+        @media (max-width: 1200px) {
+          .container {
+            padding: 0 10px;
+          }
+          
+          .bento-container {
+            grid-template-columns: 220px 1fr; /* Slightly smaller sidebar */
+            gap: 20px;
+          }
+          
+          .filter-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          .export-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        
+        @media (max-width: 992px) {
+          .bento-container {
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+          }
+          
+          .sidebar-item {
+            max-width: 200px;
+          }
+          
+          .export-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+          }
+          
+          .export-card {
+            padding: 20px;
+          }
+          
+          .export-card-icon {
+            width: 50px;
+            height: 50px;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .bento-container {
+            grid-template-columns: 1fr; /* Stack everything */
+            gap: 15px;
+          }
+          
+          .sidebar-item {
+            grid-column: 1;
+            grid-row: auto;
+            position: static;
+            max-width: none;
+            height: auto;
+            overflow-y: visible;
+            margin-bottom: 15px;
+          }
+          
+          .filters-item, .table-item, .export-item, .stats-item, .batch-item {
+            grid-column: 1;
+            grid-row: auto;
+          }
+          
+          .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .logo-title-container {
+            margin-bottom: 15px;
+          }
+          
+          .filter-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .export-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .sidebar-menu {
+            display: flex;
+            flex-wrap: wrap;
+          }
+          
+          .sidebar-menu-item {
+            margin-right: 10px;
+            margin-bottom: 10px;
+          }
+        }
+        
+        @media (max-width: 640px) {
+          body {
+            padding: 10px;
+          }
+          
+          .container {
+            padding: 0 5px;
+          }
+          
+          .pagination {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .page-info {
+            margin-bottom: 10px;
+          }
+          
+          table {
+            display: block;
+          }
+          
+          thead {
+            display: none;
+          }
+          
+          tbody, tr {
+            display: block;
+          }
+          
+          tr {
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 15px;
+          }
+          
+          td {
+            display: flex;
+            padding: 8px 0;
+            border: none;
+            text-align: right;
+            justify-content: space-between;
+          }
+          
+          td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-secondary);
+          }
+          
+          .dashboard-title {
+            font-size: 1.5rem;
+          }
+          
+          .bento-item {
+            padding: 15px;
+          }
+          
+          .export-card {
+            padding: 20px;
+          }
+          
+          .export-card-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+          }
+          
+          .btn {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+          }
+        }
+        
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: var(--card-border);
+          border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: var(--primary);
+        }
+        
+        /* Additional refinements for export section */
+        .export-card .btn-green {
+          background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        }
+        
+        .export-card .btn-blue {
+          background: linear-gradient(135deg, #1976d2, #0d47a1);
+        }
+        
+        .export-card .btn-purple {
+          background: linear-gradient(135deg, #7b1fa2, #4a148c);
+        }
+        
+        /* Enhanced sidebar scrolling */
+        .sidebar-item::-webkit-scrollbar {
+          width: 5px;
+        }
+        
+        .sidebar-item::-webkit-scrollbar-thumb {
+          background: rgba(102, 0, 197, 0.3);
+        }
+        
+        /* Additional hover effects for cards */
+        .export-card:hover .export-card-icon {
+          transform: scale(1.05);
+          box-shadow: 0 8px 15px var(--teal-glow);
+        }
+        
+        .stat-card:hover .stat-value {
+          transform: scale(1.05);
+        }
+        
+        /* Focus styles for better accessibility */
+        button:focus, a:focus, input:focus, select:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px var(--purple-glow);
+        }
+        
+        /* Improved table row highlighting */
+        tbody tr:hover td {
+          color: var(--primary-light);
+        }
+        
+        /* Enhanced active states */
+        .sidebar-menu-link.active {
+          background: linear-gradient(90deg, rgba(102, 0, 197, 0.15), rgba(0, 170, 167, 0.15));
+          font-weight: 500;
+        }
+        
+        /* Better spacing for the batch processing section */
+        .batch-item p {
+          margin-bottom: 20px;
+          line-height: 1.6;
+        }
+        
+        /* Enhanced notification */
+        .notification {
+          border-left: 4px solid var(--primary);
+        }
+        
+        .notification.success {
+          border-left: 4px solid var(--success);
+        }
+        
+        .notification.error {
+          border-left: 4px solid var(--danger);
+        }
+        
+        .notification.warning {
+          border-left: 4px solid var(--warning);
+        }
+        
+        /* Improve logo hover effect */
+        .logo-icon:hover {
+          transform: rotate(5deg) scale(1.05);
+        }
+        
+        /* Export card title underline effect on hover */
+        .export-card:hover .export-card-title {
+          background: linear-gradient(to right, var(--secondary), var(--primary));
+          background-size: 100% 2px;
+          background-position: 0 100%;
+          background-repeat: no-repeat;
+          padding-bottom: 2px;
+        }
+        
+        /* Make sure footer is properly aligned */
+        .footer {
+          grid-column: 1 / -1;
+          width: 100%;
+        }
+        
+        /* Light mode specific adjustments */
+        .light-mode .export-card {
+          background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .light-mode .export-card-icon {
+          background: rgba(245, 245, 245, 0.9);
+        }
+        
+        .light-mode thead th {
+          background-color: rgba(240, 240, 240, 0.7);
+        }
+        
+        .light-mode .btn {
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Loading animation enhancement */
+        .loading-spinner {
+          box-shadow: 0 0 15px var(--purple-glow);
+        }
+        
+        /* Better status pill visibility */
+        .status-pill {
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Improve button icon alignment */
+        .btn i {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        /* Make section headings more prominent */
+        .section-title {
+          letter-spacing: 0.5px;
+        }
+        
+        /* Subtle hover animation for action buttons */
+        .action-btn:hover i {
+          transform: translateX(-2px);
+        }
+        
+        /* Ensure proper spacing in export cards */
+        .export-card-text {
+          padding: 5px 0;
+        }
+        /* Add these CSS improvements for better mobile experience */
+        @media (max-width: 480px) {
+            .dashboard-header {
+                padding-bottom: 10px;
+            }
+            
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .dashboard-title {
+                font-size: 1.2rem;
+            }
+            
+            .company-subtitle {
+                font-size: 0.7rem;
+            }
+            
+            .btn-refresh {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-refresh i {
+                margin-right: 5px;
+            }
+            
+            td {
+                padding: 10px 5px;
+            }
+            
+            .action-btn {
+                padding: 3px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .status-pill {
+                padding: 3px 6px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="layer-blur"></div>
+    <div class="layer-blur-2"></div>
+    <div class="accent-circle circle-1"></div>
+    <div class="accent-circle circle-2"></div>
+  
+    <!-- Theme toggle button -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="logo-title-container">
+                <div class="logo-icon">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <div class="title-text">
+                    <h1 class="dashboard-title gradient">ROBIC RUFARM</h1>
+                    <p class="company-subtitle">AQUACULTURE MONITORING SYSTEM</p>
+                </div>
+            </div>
+            <button class="btn-refresh" id="refresh-btn">
+                <i class="fas fa-sync-alt"></i>
+                <span>Refresh Data</span>
+            </button>
+        </div>
+
+        <!-- Notification area -->
+        <div id="notification-area" class="notification" style="display: none;">
+            <i class="fas fa-info-circle"></i>
+            <p class="notification-message" id="notification-message"></p>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Bento box layout -->
+        <div class="bento-container">
+            <!-- Sidebar -->
+            <div class="bento-item sidebar-item">
+                <div class="sidebar-brand">
+                    <i class="fas fa-fish"></i>
+                    <span>AquaHealth</span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="/dashboard" class="sidebar-menu-link">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="/history" class="sidebar-menu-link active">
+                            <i class="fas fa-history"></i>
+                            <span>Analysis History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="/statistics" class="sidebar-menu-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="/reports" class="sidebar-menu-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="/settings" class="sidebar-menu-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Filters section -->
+            <div class="bento-item filters-item">
+                <div class="section-title">
+                    <i class="fas fa-filter"></i>
+                    <span>Filter Options</span>
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Farm</label>
+                        <div class="select-wrapper">
+                            <select id="farm-filter" class="filter-select">
+                                <option value="all">All Farms</option>
+                                <!-- Farm options will be populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Organism Type</label>
+                        <div class="select-wrapper">
+                            <select id="type-filter" class="filter-select">
+                                <option value="all">All Types</option>
+                                <option value="shrimp">Shrimp</option>
+                                <option value="fish">Fish</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Health Status</label>
+                        <div class="select-wrapper">
+                            <select id="status-filter" class="filter-select">
+                                <option value="all">All Statuses</option>
+                                <option value="healthy">Healthy</option>
+                                <option value="unhealthy">Unhealthy</option>
+                                <option value="wssv">WSSV</option>
+                                <option value="blackgill">Blackgill</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Date Range</label>
+                        <div class="select-wrapper">
+                            <select id="date-filter" class="filter-select">
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">Last 7 Days</option>
+                                <option value="month">Last 30 Days</option>
+                                <option value="quarter">Last 90 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Search</label>
+                        <input type="text" id="search-input" class="filter-input" placeholder="Search samples...">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Table section -->
+            <div class="bento-item table-item">
+                <div class="section-title">
+                    <i class="fas fa-table"></i>
+                    <span>Analysis Records</span>
+                </div>
+                
+                <!-- Loading indicator -->
+                <div id="loading-indicator" class="loading-container" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading analysis records...</p>
+                </div>
+                
+                <!-- Skeleton loader for table -->
+                <div id="skeleton-loader" class="table-container" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sample</th>
+                                <th>Type</th>
+                                <th>Farm</th>
+                                <th>Health Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="skeleton" style="width: 150px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 80px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="skeleton" style="width: 150px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 80px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="skeleton" style="width: 150px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 80px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                                <td><div class="skeleton" style="width: 120px; height: 24px;"></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Main table -->
+                <div class="table-container">
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="filename">
+                                    <div style="display: flex; align-items: center;">
+                                        Sample ID
+                                        <i class="fas fa-sort ml-1"></i>
+                                    </div>
+                                </th>
+                                <th data-sort="type">
+                                    <div style="display: flex; align-items: center;">
+                                        Type
+                                        <i class="fas fa-sort ml-1"></i>
+                                    </div>
+                                </th>
+                                <th data-sort="farm_name">
+                                    <div style="display: flex; align-items: center;">
+                                        Farm
+                                        <i class="fas fa-sort ml-1"></i>
+                                    </div>
+                                </th>
+                                <th data-sort="health_status">
+                                    <div style="display: flex; align-items: center;">
+                                        Health Status
+                                        <i class="fas fa-sort ml-1"></i>
+                                    </div>
+                                </th>
+                                <th data-sort="timestamp">
+                                    <div style="display: flex; align-items: center;">
+                                        Date
+                                        <i class="fas fa-sort ml-1"></i>
+                                    </div>
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <tr id="no-records-row">
+                                <td colspan="6" style="text-align: center; padding: 30px;">
+                                    <i class="fas fa-search" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 15px; display: block;"></i>
+                                    <p style="color: var(--text-secondary);">No matching records found</p>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Try adjusting your filters or search criteria</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="page-info">
+                        Showing <span id="displayed-count" class="gradient" style="font-weight: 600;">0</span> of <span id="total-count" style="font-weight: 600;">0</span> records
+                    </div>
+                    
+                    <div class="page-controls">
+                        <select id="page-size" class="page-size-select">
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </select>
+                        
+                        <div class="page-buttons">
+                            <button id="first-page" disabled>
+                                <i class="fas fa-angle-double-left"></i>
+                            </button>
+                            <button id="prev-page" disabled>
+                                <i class="fas fa-angle-left"></i>
+                            </button>
+                            <span id="page-indicator" class="page-indicator">Page 1 of 1</span>
+                            <button id="next-page" disabled>
+                                <i class="fas fa-angle-right"></i>
+                            </button>
+                            <button id="last-page" disabled>
+                                <i class="fas fa-angle-double-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Export section -->
+            <div class="bento-item export-item">
+                <div class="section-title">
+                    <i class="fas fa-download"></i>
+                    <span>Export Options</span>
+                </div>
+                
+                <div class="export-grid">
+                    <div class="export-card">
+                        <div class="export-card-header">
+                            <div class="export-card-icon" style="background: rgba(46, 125, 50, 0.1);">
+                                <i class="fas fa-file-archive" style="color: #2e7d32;"></i>
+                            </div>
+                            <div class="export-card-title">Export All Reports</div>
+                        </div>
+                        <div class="export-card-text">
+                            Download all health reports as a single ZIP file for trade documentation and record-keeping.
+                        </div>
+                        <button id="export-all-reports" class="btn btn-green">
+                            <i class="fas fa-download"></i>
+                            <span>Download Reports</span>
+                        </button>
+                    </div>
+                    
+                    <div class="export-card">
+                        <div class="export-card-header">
+                            <div class="export-card-icon" style="background: rgba(25, 118, 210, 0.1);">
+                                <i class="fas fa-file-excel" style="color: #1976d2;"></i>
+                            </div>
+                            <div class="export-card-title">Export Analysis Data</div>
+                        </div>
+                        <div class="export-card-text">
+                            Download a spreadsheet of all analysis results for statistical analysis and tracking.
+                        </div>
+                        <button id="export-as-spreadsheet" class="btn btn-blue">
+                            <i class="fas fa-table"></i>
+                            <span>Export as Spreadsheet</span>
+                        </button>
+                    </div>
+                    
+                    <div class="export-card">
+                        <div class="export-card-header">
+                            <div class="export-card-icon" style="background: rgba(123, 31, 162, 0.1);">
+                                <i class="fas fa-chart-pie" style="color: #7b1fa2;"></i>
+                            </div>
+                            <div class="export-card-title">Generate Report</div>
+                        </div>
+                        <div class="export-card-text">
+                            Create a custom report based on the current filtered data with analysis and recommendations.
+                        </div>
+                        <button id="generate-custom-report" class="btn btn-purple">
+                            <i class="fas fa-magic"></i>
+                            <span>Create Custom Report</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats section -->
+            <div class="bento-item stats-item">
+                <div class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Quick Stats</span>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value healthy-value" id="healthy-rate">--</div>
+                        <div class="stat-label">Healthy Rate</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value unhealthy-value" id="unhealthy-rate">--</div>
+                        <div class="stat-label">Unhealthy Rate</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value shrimp-value" id="shrimp-count">--</div>
+                        <div class="stat-label">Shrimp Count</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value fish-value" id="fish-count">--</div>
+                        <div class="stat-label">Fish Count</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="/statistics" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">
+                        <i class="fas fa-external-link-alt" style="margin-right: 5px;"></i>
+                        View detailed statistics
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Batch processing -->
+            <div class="bento-item batch-item">
+                <div class="section-title">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Batch Processing</span>
+                </div>
+                
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                    Select multiple records to process or analyze them together.
+                </p>
+                
+                <div class="batch-buttons">
+                    <button id="select-all-btn" class="btn btn-primary">
+                        <i class="fas fa-check-square"></i>
+                        <span>Select All Visible Records</span>
+                    </button>
+                    
+                    <button id="batch-download-btn" class="btn" style="background-color: var(--input-bg); color: var(--text-muted);" disabled>
+                        <i class="fas fa-download"></i>
+                        <span>Download Selected Reports</span>
+                    </button>
+                    
+                    <button id="batch-analyze-btn" class="btn" style="background-color: var(--input-bg); color: var(--text-muted);" disabled>
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analyze Selected Data</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 Aquaculture Health Analysis System | Version 2.4.1</p>
+            <p style="margin-top: 10px;">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Help & Support</a>
+            </p>
+        </div>
+    </div>
+    
+    <!-- JavaScript for functionality -->
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            
+            // Change icon based on theme
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+        
+        // Check for user's preferred color scheme
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.body.classList.add('light-mode');
+            themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+        }
+
+        // Add debugging info
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("History page DOM loaded");
+            
+            // Test backend connectivity
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Server health check:", data);
+                    if (data.status === "healthy") {
+                        console.log("Server connection confirmed healthy");
+                    } else {
+                        console.warn("Server reports unhealthy status");
+                    }
+                })
+                .catch(err => {
+                    console.error("Cannot connect to server:", err);
+                });
+        });
+
+        // Main functionality
+        // Main functionality
+        document.addEventListener('DOMContentLoaded', function() {
+          // Configuration
+          let RECORDS_PER_PAGE = 10;
+          let currentPage = 1;
+          let allRecords = [];
+          let filteredRecords = [];
+          let selectedRecords = new Set();
+          let currentSortField = 'timestamp';
+          let currentSortDirection = 'desc';
+          
+          // Elements
+          const farmFilter = document.getElementById('farm-filter');
+          const typeFilter = document.getElementById('type-filter');
+          const statusFilter = document.getElementById('status-filter');
+          const dateFilter = document.getElementById('date-filter');
+          const searchInput = document.getElementById('search-input');
+          const tableBody = document.getElementById('history-table-body');
+          const loadingIndicator = document.getElementById('loading-indicator');
+          const skeletonLoader = document.getElementById('skeleton-loader');
+          const displayedCount = document.getElementById('displayed-count');
+          const totalCount = document.getElementById('total-count');
+          const pageIndicator = document.getElementById('page-indicator');
+          const prevPageBtn = document.getElementById('prev-page');
+          const nextPageBtn = document.getElementById('next-page');
+          const firstPageBtn = document.getElementById('first-page');
+          const lastPageBtn = document.getElementById('last-page');
+          const pageSize = document.getElementById('page-size');
+          const exportAllBtn = document.getElementById('export-all-reports');
+          const exportSpreadsheetBtn = document.getElementById('export-as-spreadsheet');
+          const generateReportBtn = document.getElementById('generate-custom-report');
+          const refreshBtn = document.getElementById('refresh-btn');
+          const selectAllBtn = document.getElementById('select-all-btn');
+          const batchDownloadBtn = document.getElementById('batch-download-btn');
+          const batchAnalyzeBtn = document.getElementById('batch-analyze-btn');
+          const healthyRate = document.getElementById('healthy-rate');
+          const unhealthyRate = document.getElementById('unhealthy-rate');
+          const shrimpCount = document.getElementById('shrimp-count');
+          const fishCount = document.getElementById('fish-count');
+          const notification = document.getElementById('notification-area');
+          const notificationMessage = document.getElementById('notification-message');
+          const sortHeaders = document.querySelectorAll('th[data-sort]');
+          
+          // Empty string for relative URLs
+          const urlBase = '';
+          
+          // Initial data load
+          initializePage();
+          
+          // Event listeners
+          farmFilter.addEventListener('change', loadData);  // Reload data when farm changes
+          typeFilter.addEventListener('change', applyFilters);
+          statusFilter.addEventListener('change', applyFilters);
+          dateFilter.addEventListener('change', applyFilters);
+          searchInput.addEventListener('input', debounce(applyFilters, 300));
+          prevPageBtn.addEventListener('click', goToPrevPage);
+          nextPageBtn.addEventListener('click', goToNextPage);
+          firstPageBtn.addEventListener('click', goToFirstPage);
+          lastPageBtn.addEventListener('click', goToLastPage);
+          pageSize.addEventListener('change', changePageSize);
+          exportAllBtn.addEventListener('click', exportAllReports);
+          exportSpreadsheetBtn.addEventListener('click', exportAsSpreadsheet);
+          generateReportBtn.addEventListener('click', generateCustomReport);
+          refreshBtn.addEventListener('click', refreshData);
+          selectAllBtn.addEventListener('click', toggleSelectAllRecords);
+          batchDownloadBtn.addEventListener('click', downloadSelectedReports);
+          batchAnalyzeBtn.addEventListener('click', analyzeSelectedData);
+          
+          // Setup notification close button
+          document.querySelector('.notification-close').addEventListener('click', function() {
+              notification.style.display = 'none';
+          });
+          
+          // Add sort functionality to table headers
+          sortHeaders.forEach(header => {
+              header.addEventListener('click', () => {
+                  const field = header.getAttribute('data-sort');
+                  sortRecords(field);
+              });
+          });
+          
+          // Initialize with saved filters if available
+          function initializePage() {
+              console.log("Initializing history page...");
+              
+              // Load saved preferences from localStorage if available
+              loadSavedPreferences();
+              
+              // Load farms first, then load data
+              loadFarms().then(() => {
+                  loadData();
+              }).catch(error => {
+                  console.error("Failed to load farms:", error);
+                  // Try to load data anyway
+                  loadData();
+              });
+              
+              // Set up persistent filter storage
+              ['type-filter', 'status-filter', 'date-filter', 'page-size', 'farm-filter'].forEach(id => {
+                  const element = document.getElementById(id);
+                  if (element) {
+                      element.addEventListener('change', savePreferences);
+                  } else {
+                      console.error(`Element with ID ${id} not found`);
+                  }
+              });
+          }
+          
+          // Make loadFarms return a promise for better chaining
+          function loadFarms() {
+              return new Promise((resolve, reject) => {
+                  fetch(`${urlBase}/api/farms`)
+                      .then(response => {
+                          console.log("Farms API response status:", response.status);
+                          if (!response.ok) {
+                              throw new Error('Failed to fetch farms: ' + response.status);
+                          }
+                          return response.json();
+                      })
+                      .then(data => {
+                          console.log("Farms data received:", data);
+                          if (data.success && data.farms) {
+                              populateFarmFilter(data.farms);
+                              resolve(data.farms);
+                          } else {
+                              throw new Error('Invalid farm data received');
+                          }
+                      })
+                      .catch(error => {
+                          console.error('Error loading farms:', error);
+                          showNotification('Error loading farms. Using default values.', 'warning');
+                          
+                          // Create mock farms if API fails
+                          const mockFarms = [
+                              { _id: 'farm1', farm_name: 'Ocean Harvest Farm' },
+                              { _id: 'farm2', farm_name: 'Blue Bay Aquaculture' },
+                              { _id: 'farm3', farm_name: 'Pacific Edge Farms' }
+                          ];
+                          populateFarmFilter(mockFarms);
+                          resolve(mockFarms);
+                      });
+              });
+          }
+          
+          // Populate farm filter dropdown
+          function populateFarmFilter(farms) {
+              // Keep the "All Farms" option
+              farmFilter.innerHTML = '<option value="all">All Farms</option>';
+              
+              // Add farms to dropdown
+              farms.forEach(farm => {
+                  const option = document.createElement('option');
+                  option.value = farm._id;
+                  option.textContent = farm.farm_name;
+                  farmFilter.appendChild(option);
+              });
+              
+              // Check for saved preference
+              const savedPrefs = JSON.parse(localStorage.getItem('aquaculture_history_prefs') || '{}');
+              if (savedPrefs.farmFilter) {
+                  farmFilter.value = savedPrefs.farmFilter;
+              }
+          }
+          
+          function loadSavedPreferences() {
+              try {
+                  const savedPrefs = JSON.parse(localStorage.getItem('aquaculture_history_prefs'));
+                  if (savedPrefs) {
+                      if (savedPrefs.typeFilter) typeFilter.value = savedPrefs.typeFilter;
+                      if (savedPrefs.statusFilter) statusFilter.value = savedPrefs.statusFilter;
+                      if (savedPrefs.dateFilter) dateFilter.value = savedPrefs.dateFilter;
+                      if (savedPrefs.pageSize) {
+                          pageSize.value = savedPrefs.pageSize;
+                          RECORDS_PER_PAGE = parseInt(savedPrefs.pageSize);
+                      }
+                      // Farm filter will be applied when farms are loaded
+                  }
+              } catch (e) {
+                  console.error('Error loading saved preferences:', e);
+              }
+          }
+          
+          function savePreferences() {
+              try {
+                  const prefs = {
+                      typeFilter: typeFilter.value,
+                      statusFilter: statusFilter.value,
+                      dateFilter: dateFilter.value,
+                      pageSize: pageSize.value,
+                      farmFilter: farmFilter.value
+                  };
+                  localStorage.setItem('aquaculture_history_prefs', JSON.stringify(prefs));
+              } catch (e) {
+                  console.error('Error saving preferences:', e);
+              }
+          }
+          
+          // Utility functions
+          function debounce(func, wait) {
+              let timeout;
+              return function executedFunction(...args) {
+                  const later = () => {
+                      clearTimeout(timeout);
+                      func(...args);
+                  };
+                  clearTimeout(timeout);
+                  timeout = setTimeout(later, wait);
+              };
+          }
+          
+          function showNotification(message, type = 'info') {
+              // Set notification icon and colors based on type
+              const icon = notification.querySelector('i');
+              icon.className = ''; // Reset icon classes
+              
+              switch (type) {
+                  case 'success':
+                      icon.className = 'fas fa-check-circle';
+                      icon.style.color = 'var(--success)';
+                      break;
+                  case 'error':
+                      icon.className = 'fas fa-exclamation-circle';
+                      icon.style.color = 'var(--danger)';
+                      break;
+                  case 'warning':
+                      icon.className = 'fas fa-exclamation-triangle';
+                      icon.style.color = 'var(--warning)';
+                      break;
+                  default: // info
+                      icon.className = 'fas fa-info-circle';
+                      icon.style.color = 'var(--primary)';
+              }
+              
+              // Set message and show notification
+              notificationMessage.textContent = message;
+              notification.style.display = 'flex';
+              notification.classList.add('show');
+              
+              // Auto-hide after 5 seconds
+              setTimeout(() => {
+                  notification.classList.remove('show');
+                  setTimeout(() => {
+                      notification.style.display = 'none';
+                  }, 300);
+              }, 5000);
+          }
+          
+          // Function to show loading indicators
+          function showLoading(show) {
+              if (loadingIndicator) {
+                  loadingIndicator.style.display = show ? 'flex' : 'none';
+              }
+              if (skeletonLoader) {
+                  skeletonLoader.style.display = show ? 'block' : 'none';
+              }
+          }
+          
+          // Function to refresh data
+          function refreshData() {
+              // Clear any selected records
+              selectedRecords.clear();
+              updateBatchButtons();
+              
+              // Show loading indicator
+              showLoading(true);
+              
+              // Reload farms and data
+              loadFarms().then(() => {
+                  loadData();
+              });
+          }
+          
+          function generateCustomReport() {
+              // Get current filter parameters
+              const params = new URLSearchParams({
+                  report_name: 'Custom Analysis Report',
+                  date_range: dateFilter.value === 'week' ? '7' : 
+                             dateFilter.value === 'month' ? '30' : 
+                             dateFilter.value === 'quarter' ? '90' : 'all',
+                  organism_type: typeFilter.value,
+                  health_status: statusFilter.value,
+                  farm_id: farmFilter.value,
+                  include_summary: '1',
+                  include_trends: '1',
+                  include_recommendations: '1',
+                  include_details: '1',
+                  report_format: 'txt'
+              });
+              
+              showNotification('Generating custom report...', 'info');
+              
+              // Redirect to the report generation endpoint
+              window.location.href = `${urlBase}/api/export-statistics?${params.toString()}`;
+          }
+          
+          function exportAsSpreadsheet() {
+              // Get current filter parameters
+              const params = new URLSearchParams({
+                  type: typeFilter.value,
+                  status: statusFilter.value,
+                  date: dateFilter.value,
+                  search: searchInput.value,
+                  farm_id: farmFilter.value
+              });
+              
+              showNotification('Exporting data as spreadsheet...', 'info');
+              
+              // Redirect to CSV export endpoint
+              window.location.href = `${urlBase}/api/export-csv?${params.toString()}`;
+          }
+          
+          function exportAllReports() {
+              showNotification('Preparing reports for download...', 'info');
+              
+              // Get IDs of all filtered records
+              const recordIds = filteredRecords.map(record => record.id);
+              
+              // POST to the batch export endpoint
+              fetch(`${urlBase}/api/export-batch`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      record_ids: recordIds,
+                      type: typeFilter.value
+                  })
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Failed to generate batch export');
+                  }
+                  return response.blob();
+              })
+              .then(blob => {
+                  // Create and click a download link
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `batch_reports_${new Date().toISOString().slice(0, 10)}.zip`;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  
+                  showNotification('Reports downloaded successfully', 'success');
+              })
+              .catch(error => {
+                  console.error('Error exporting reports:', error);
+                  showNotification('Error generating reports. Please try again.', 'error');
+              });
+          }
+          
+          function analyzeSelectedData() {
+              if (selectedRecords.size === 0) return;
+              
+              showNotification(`Analyzing ${selectedRecords.size} selected records...`, 'info');
+              
+              // In a real implementation, this would send the selected IDs to an analysis endpoint
+              // For now, we'll just show statistics about the selected records
+              
+              const selectedData = filteredRecords.filter(record => selectedRecords.has(record.id));
+              
+              // Calculate basic statistics
+              const totalSelected = selectedData.length;
+              const healthySelected = selectedData.filter(r => r.health_status === 'Healthy').length;
+              const unhealthySelected = totalSelected - healthySelected;
+              const shrimpSelected = selectedData.filter(r => r.type === 'shrimp').length;
+              const fishSelected = selectedData.filter(r => r.type === 'fish').length;
+              
+              // Display statistics in a notification
+              const statsMessage = `Analysis of ${totalSelected} records:
+- Healthy: ${healthySelected} (${Math.round(healthySelected/totalSelected*100)}%)
+- Unhealthy: ${unhealthySelected} (${Math.round(unhealthySelected/totalSelected*100)}%)
+- Shrimp: ${shrimpSelected}, Fish: ${fishSelected}`;
+              
+              showNotification(statsMessage, 'success');
+          }
+          
+          // Function to download selected reports
+          function downloadSelectedReports() {
+              if (selectedRecords.size === 0) return;
+              
+              showNotification(`Preparing ${selectedRecords.size} selected reports for download...`, 'info');
+              
+              // Convert the Set to an Array
+              const recordIdsArray = Array.from(selectedRecords);
+              
+              // POST to the batch export endpoint
+              fetch(`${urlBase}/api/export-batch`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      record_ids: recordIdsArray,
+                      type: 'all'
+                  })
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Failed to generate selected reports');
+                  }
+                  return response.blob();
+              })
+              .then(blob => {
+                  // Create and click a download link
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `selected_reports_${new Date().toISOString().slice(0, 10)}.zip`;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  
+                  showNotification('Selected reports downloaded successfully', 'success');
+              })
+              .catch(error => {
+                  console.error('Error exporting selected reports:', error);
+                  showNotification('Error generating reports. Please try again.', 'error');
+              });
+          }
+          
+          // Load data function with fixed fetching
+          function loadData() {
+              console.log("Starting data load...");
+              showLoading(true);
+              selectedRecords.clear();
+              updateBatchButtons();
+              
+              // Get the farm filter value
+              const farmId = farmFilter.value;
+              console.log("Farm ID selected:", farmId);
+              
+              // Build query strings for API calls
+              const shrimpURL = `${urlBase}/api/history/shrimp${farmId !== 'all' ? `?farm_id=${farmId}` : ''}`;
+              const fishURL = `${urlBase}/api/history/fish${farmId !== 'all' ? `?farm_id=${farmId}` : ''}`;
+              
+              console.log("Fetching from:", shrimpURL, fishURL);
+              
+              // Try to fetch real data first
+              fetchRealData()
+                  .catch(error => {
+                      console.warn("Failed to load real data, using mock data:", error);
+                      useMockData();
+                  });
+                  
+              function fetchRealData() {
+                  return new Promise((resolve, reject) => {
+                      // Fetch shrimp data
+                      fetch(shrimpURL)
+                          .then(response => {
+                              console.log("Shrimp response status:", response.status);
+                              if (!response.ok) {
+                                  throw new Error(`Failed to fetch shrimp data: ${response.status}`);
+                              }
+                              return response.json();
+                          })
+                          .then(shrimpData => {
+                              console.log("Received shrimp data:", shrimpData ? shrimpData.length : 0);
+                              
+                              // Fetch fish data
+                              return fetch(fishURL)
+                                  .then(response => {
+                                      console.log("Fish response status:", response.status);
+                                      if (!response.ok) {
+                                          throw new Error(`Failed to fetch fish data: ${response.status}`);
+                                      }
+                                      return response.json();
+                                  })
+                                  .then(fishData => {
+                                      console.log("Received fish data:", fishData ? fishData.length : 0);
+                                      
+                                      // Combine data
+                                      allRecords = [...(shrimpData || []), ...(fishData || [])];
+                                      console.log("Combined records:", allRecords.length);
+                                      
+                                      if (allRecords.length === 0) {
+                                          console.warn("APIs returned empty arrays, using mock data");
+                                          throw new Error("No real data available");
+                                      }
+                                      
+                                      processRecords();
+                                      resolve();
+                                  });
+                          })
+                          .catch(error => {
+                              console.error("Error in fetchRealData:", error);
+                              reject(error);
+                          });
+                  });
+              }
+              
+              function useMockData() {
+                  console.log("Generating mock data for display...");
+                  showNotification("Using sample data for demonstration", "info");
+                  
+                  // Generate mock data
+                  allRecords = generateMockData();
+                  processRecords();
+              }
+              
+              function processRecords() {
+                  // Convert timestamps to Date objects for easier sorting
+                  allRecords.forEach(record => {
+                      record.timestampObj = new Date(record.timestamp);
+                  });
+                  
+                  // Sort by timestamp (newest first)
+                  allRecords.sort((a, b) => b.timestampObj - a.timestampObj);
+                  
+                  // Apply initial filters and render
+                  applyFilters();
+                  updateQuickStats();
+                  showLoading(false);
+                  showNotification('Records loaded successfully', 'success');
+              }
+          }
+          
+          // Generate mock data function
+          function generateMockData() {
+              console.log("Generating mock data...");
+              const mockData = [];
+              const types = ['shrimp', 'fish'];
+              const statuses = ['Healthy', 'Unhealthy', 'Wssv', 'Blackgill'];
+              const farms = ['Ocean Harvest Farm', 'Blue Bay Aquaculture', 'Pacific Edge Farms'];
+              
+              for (let i = 1; i <= 30; i++) {
+                  const type = types[Math.floor(Math.random() * types.length)];
+                  const status = statuses[Math.floor(Math.random() * statuses.length)];
+                  const farm = farms[Math.floor(Math.random() * farms.length)];
+                  
+                  // Create date in the past 90 days
+                  const date = new Date();
+                  date.setDate(date.getDate() - Math.floor(Math.random() * 90));
+                  
+                  mockData.push({
+                      id: 'mock-' + i,
+                      filename: `sample_${type}_${i}.jpg`,
+                      type: type,
+                      health_status: status,
+                      timestamp: date.toISOString(),
+                      farm_name: farm,
+                      confidence: (Math.random() * 0.5 + 0.5).toFixed(2)  // Between 0.5 and 1.0
+                  });
+              }
+              
+              console.log(`Generated ${mockData.length} mock records`);
+              return mockData;
+          }
+          
+          // Filter and display functions
+          function applyFilters() {
+              const typeValue = typeFilter.value;
+              const statusValue = statusFilter.value;
+              const dateValue = dateFilter.value;
+              const searchValue = searchInput.value.toLowerCase().trim();
+              
+              // Filter records based on selected values
+              filteredRecords = allRecords.filter(record => {
+                  // Type filter
+                  const typeMatch = typeValue === 'all' || record.type === typeValue;
+                  
+                  // Status filter (with case insensitivity)
+                  const recordStatus = record.health_status.toLowerCase();
+                  let statusMatch = false;
+                  
+                  if (statusValue === 'all') {
+                      statusMatch = true;
+                  } else if (statusValue === 'healthy' && recordStatus === 'healthy') {
+                      statusMatch = true;
+                  } else if (statusValue === 'unhealthy' && (recordStatus === 'unhealthy' || recordStatus === 'wssv' || recordStatus === 'blackgill')) {
+                      statusMatch = true;
+                  } else if (statusValue === 'wssv' && recordStatus === 'wssv') {
+                      statusMatch = true;
+                  } else if (statusValue === 'blackgill' && recordStatus === 'blackgill') {
+                      statusMatch = true;
+                  }
+                  
+                  // Date filter
+                  let dateMatch = true;
+                  if (dateValue !== 'all') {
+                      const recordDate = record.timestampObj;
+                      const now = new Date();
+                      
+                      if (dateValue === 'today') {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          dateMatch = recordDate >= today;
+                      } else if (dateValue === 'week') {
+                          const weekAgo = new Date();
+                          weekAgo.setDate(now.getDate() - 7);
+                          dateMatch = recordDate >= weekAgo;
+                      } else if (dateValue === 'month') {
+                          const monthAgo = new Date();
+                          monthAgo.setDate(now.getDate() - 30);
+                          dateMatch = recordDate >= monthAgo;
+                      } else if (dateValue === 'quarter') {
+                          const quarterAgo = new Date();
+                          quarterAgo.setDate(now.getDate() - 90);
+                          dateMatch = recordDate >= quarterAgo;
+                      }
+                  }
+                  
+                  // Search filter
+                  let searchMatch = true;
+                  if (searchValue) {
+                      searchMatch = 
+                          record.filename.toLowerCase().includes(searchValue) || 
+                          record.type.toLowerCase().includes(searchValue) || 
+                          record.health_status.toLowerCase().includes(searchValue) ||
+                          (record.farm_name && record.farm_name.toLowerCase().includes(searchValue)) ||
+                          new Date(record.timestamp).toLocaleDateString().includes(searchValue);
+                  }
+                  
+                  return typeMatch && statusMatch && dateMatch && searchMatch;
+              });
+              
+              // Apply current sort
+              sortRecordsByCurrentCriteria();
+              
+              // Reset pagination to first page
+              currentPage = 1;
+              
+              // Update UI
+              renderRecords();
+              updatePagination();
+              updateQuickStats();
+          }
+          
+          function sortRecords(field) {
+              // Toggle direction if clicking the same field
+              if (field === currentSortField) {
+                  currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+              } else {
+                  currentSortField = field;
+                  currentSortDirection = 'asc';
+              }
+              
+              // Update sort indicators in UI
+              updateSortIndicators();
+              
+              // Sort records
+              sortRecordsByCurrentCriteria();
+              
+              // Re-render with new sort
+              renderRecords();
+          }
+          
+          function sortRecordsByCurrentCriteria() {
+              filteredRecords.sort((a, b) => {
+                  let valueA, valueB;
+                  
+                  // Handle different field types
+                  if (currentSortField === 'timestamp') {
+                      valueA = a.timestampObj.getTime();
+                      valueB = b.timestampObj.getTime();
+                  } else if (currentSortField === 'farm_name') {
+                      valueA = a.farm_name || '';
+                      valueB = b.farm_name || '';
+                  } else {
+                      valueA = a[currentSortField];
+                      valueB = b[currentSortField];
+                  }
+                  
+                  // Case insensitive string comparison
+                  if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+                  if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+                  
+                  // Compare values
+                  if (valueA < valueB) return currentSortDirection === 'asc' ? -1 : 1;
+                  if (valueA > valueB) return currentSortDirection === 'asc' ? 1 : -1;
+                  return 0;
+              });
+          }
+          
+          function updateSortIndicators() {
+              // Reset all indicators
+              sortHeaders.forEach(header => {
+                  const icon = header.querySelector('i');
+                  icon.className = 'fas fa-sort ml-1';
+                  icon.style.color = 'var(--text-muted)';
+              });
+              
+              // Set active indicator
+              const activeHeader = document.querySelector(`th[data-sort="${currentSortField}"]`);
+              if (activeHeader) {
+                  const icon = activeHeader.querySelector('i');
+                  icon.className = `fas fa-sort-${currentSortDirection === 'asc' ? 'up' : 'down'} ml-1`;
+                  icon.style.color = 'var(--primary)';
+              }
+          }
+          
+          function renderRecords() {
+              console.log("Rendering records:", filteredRecords.length);
+              
+              // Calculate slice indexes
+              const startIndex = (currentPage - 1) * RECORDS_PER_PAGE;
+              const endIndex = startIndex + RECORDS_PER_PAGE;
+              const recordsToShow = filteredRecords.slice(startIndex, endIndex);
+              
+              // Clear table
+              tableBody.innerHTML = '';
+              
+              // Show message if no records
+              if (recordsToShow.length === 0) {
+                  const row = document.createElement('tr');
+                  row.id = 'no-records-row';
+                  row.innerHTML = `
+                      <td colspan="6" style="text-align: center; padding: 30px;">
+                          <i class="fas fa-search" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 15px; display: block;"></i>
+                          <p style="color: var(--text-secondary);">No matching records found</p>
+                          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Try adjusting your filters or search criteria</p>
+                      </td>
+                  `;
+                  tableBody.appendChild(row);
+                  
+                  // Update counters
+                  displayedCount.textContent = '0';
+                  totalCount.textContent = filteredRecords.length;
+                  return;
+              }
+              
+              console.log("Records to show:", recordsToShow.length);
+              
+              // Render records
+              recordsToShow.forEach(record => {
+                  try {
+                      const row = document.createElement('tr');
+                      row.setAttribute('data-id', record.id);
+                      row.setAttribute('data-status', (record.health_status || '').toLowerCase());
+                      row.setAttribute('data-type', record.type);
+                      
+                      // Format date
+                      let date, formattedDate;
+                      try {
+                          date = new Date(record.timestamp);
+                          formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      } catch (e) {
+                          console.error("Date parsing error:", e);
+                          formattedDate = "Invalid date";
+                      }
+                      
+                      // Status class and icon
+                      let statusClass, statusIcon;
+                      const status = (record.health_status || '').toLowerCase();
+                      switch (status) {
+                          case 'healthy':
+                              statusClass = 'healthy';
+                              statusIcon = 'fa-check-circle';
+                              break;
+                          case 'unhealthy':
+                              statusClass = 'unhealthy';
+                              statusIcon = 'fa-times-circle';
+                              break;
+                          case 'wssv':
+                              statusClass = 'wssv';
+                              statusIcon = 'fa-exclamation-triangle';
+                              break;
+                          case 'blackgill':
+                              statusClass = 'blackgill';
+                              statusIcon = 'fa-exclamation-circle';
+                              break;
+                          default:
+                              statusClass = '';
+                              statusIcon = 'fa-question-circle';
+                      }
+                      
+                      // Check if this record is selected
+                      const isSelected = selectedRecords.has(record.id);
+                      if (isSelected) {
+                          row.style.backgroundColor = 'rgba(102, 0, 197, 0.05)';
+                      }
+                      
+                      // Farm name
+                      const farmName = record.farm_name || 'N/A';
+                      
+                      row.innerHTML = `
+                            <td data-label="Sample">
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" class="custom-checkbox record-checkbox" ${isSelected ? 'checked' : ''}>
+                                    <span>${record.filename || 'Unnamed'}</span>
+                                </div>
+                            </td>
+                            <td data-label="Type">
+                                <span style="display: flex; align-items: center; text-transform: capitalize;">
+                                    <i class="fas ${record.type === 'fish' ? 'fa-fish' : 'fa-water'}" style="margin-right: 8px; color: ${record.type === 'fish' ? 'var(--primary)' : 'var(--secondary)'}"></i>
+                                    ${record.type || 'Unknown'}
+                                </span>
+                            </td>
+                            <td data-label="Farm">
+                                <span style="display: flex; align-items: center;">
+                                    <i class="fas fa-map-marker-alt" style="margin-right: 8px; color: var(--text-muted);"></i>
+                                    ${farmName}
+                                </span>
+                            </td>
+                            <td data-label="Health Status">
+                                <span class="status-pill ${statusClass}">
+                                    <i class="fas ${statusIcon}"></i>
+                                    ${record.health_status || 'Unknown'}
+                                </span>
+                            </td>
+                            <td data-label="Date">
+                                <span style="display: flex; align-items: center;">
+                                    <i class="far fa-calendar-alt" style="margin-right: 8px; color: var(--text-muted);"></i>
+                                    ${formattedDate}
+                                </span>
+                            </td>
+                            <td data-label="Actions">
+                                <div style="display: flex; gap: 10px;">
+                                    <a href="${urlBase}/result/${record.type}/${record.id}" class="action-btn">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="${urlBase}/generate_report/${record.type}/${record.id}" class="action-btn">
+                                        <i class="fas fa-download"></i> Report
+                                    </a>
+                                    <button class="action-btn quick-view-btn">
+                                        <i class="fas fa-search-plus"></i> Quick View
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                        
+                        // Add event listener for checkbox
+                        const checkbox = row.querySelector('.record-checkbox');
+                        checkbox.addEventListener('change', () => {
+                            toggleRecordSelection(record.id, checkbox.checked);
+                        });
+                        
+                        // Add event listener for quick view
+                        const quickViewBtn = row.querySelector('.quick-view-btn');
+                        quickViewBtn.addEventListener('click', () => {
+                            showQuickView(record);
+                        });
+                    } catch (error) {
+                        console.error("Error rendering record:", error, record);
+                    }
+                });
+                
+                // Update counters
+                displayedCount.textContent = recordsToShow.length;
+                totalCount.textContent = filteredRecords.length;
+            }
+            
+            function updateQuickStats() {
+                try {
+                    // Check if we have filtered records
+                    if (!filteredRecords || filteredRecords.length === 0) {
+                        // Set placeholders if no data
+                        healthyRate.textContent = "0%";
+                        unhealthyRate.textContent = "0%";
+                        shrimpCount.textContent = "0";
+                        fishCount.textContent = "0";
+                        return;
+                    }
+                    
+                    // Calculate stats
+                    const totalCount = filteredRecords.length;
+                    const healthyCount = filteredRecords.filter(r => r.health_status === 'Healthy').length;
+                    const unhealthyCount = totalCount - healthyCount;
+                    const healthyPercentage = Math.round((healthyCount / totalCount) * 100);
+                    const unhealthyPercentage = Math.round((unhealthyCount / totalCount) * 100);
+                    
+                    // Count by type
+                    const shrimpRecords = filteredRecords.filter(r => r.type === 'shrimp').length;
+                    const fishRecords = filteredRecords.filter(r => r.type === 'fish').length;
+                    
+                    // Update UI
+                    healthyRate.textContent = healthyPercentage + "%";
+                    unhealthyRate.textContent = unhealthyPercentage + "%";
+                    shrimpCount.textContent = shrimpRecords;
+                    fishCount.textContent = fishRecords;
+                    
+                    console.log("Stats updated:", {
+                        healthy: healthyPercentage + "%", 
+                        unhealthy: unhealthyPercentage + "%",
+                        shrimp: shrimpRecords,
+                        fish: fishRecords
+                    });
+                } catch (e) {
+                    console.error("Error updating stats:", e);
+                }
+            }
+            
+            function updatePagination() {
+                const totalPages = Math.ceil(filteredRecords.length / RECORDS_PER_PAGE);
+                
+                // Update page indicator
+                if (pageIndicator) {
+                    pageIndicator.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+                }
+                
+                // Update button states
+                if (prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
+                if (nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
+                if (firstPageBtn) firstPageBtn.disabled = currentPage <= 1;
+                if (lastPageBtn) lastPageBtn.disabled = currentPage >= totalPages;
+            }
+            
+            function goToPrevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderRecords();
+                    updatePagination();
+                }
+            }
+            
+            function goToNextPage() {
+                const maxPage = Math.ceil(filteredRecords.length / RECORDS_PER_PAGE);
+                if (currentPage < maxPage) {
+                    currentPage++;
+                    renderRecords();
+                    updatePagination();
+                }
+            }
+            
+            function goToFirstPage() {
+                currentPage = 1;
+                renderRecords();
+                updatePagination();
+            }
+            
+            function goToLastPage() {
+                currentPage = Math.ceil(filteredRecords.length / RECORDS_PER_PAGE);
+                renderRecords();
+                updatePagination();
+            }
+            
+            function changePageSize() {
+                RECORDS_PER_PAGE = parseInt(pageSize.value);
+                currentPage = 1;
+                renderRecords();
+                updatePagination();
+                savePreferences();
+            }
+            
+            function toggleRecordSelection(recordId, isSelected) {
+                console.log("Toggle selection:", recordId, isSelected);
+                if (isSelected) {
+                    selectedRecords.add(recordId);
+                } else {
+                    selectedRecords.delete(recordId);
+                }
+                updateBatchButtons();
+            }
+            
+            function updateBatchButtons() {
+                const hasSelection = selectedRecords.size > 0;
+                
+                // Update batch download button
+                if (batchDownloadBtn) {
+                    batchDownloadBtn.disabled = !hasSelection;
+                    batchDownloadBtn.style.backgroundColor = hasSelection ? 'var(--primary)' : 'var(--input-bg)';
+                    batchDownloadBtn.style.color = hasSelection ? 'white' : 'var(--text-muted)';
+                }
+                
+                // Update batch analyze button
+                if (batchAnalyzeBtn) {
+                    batchAnalyzeBtn.disabled = !hasSelection;
+                    batchAnalyzeBtn.style.backgroundColor = hasSelection ? 'var(--primary)' : 'var(--input-bg)';
+                    batchAnalyzeBtn.style.color = hasSelection ? 'white' : 'var(--text-muted)';
+                }
+            }
+            
+            function toggleSelectAllRecords() {
+                const currentPage = getCurrentPageRecords();
+                const allSelected = currentPage.every(record => selectedRecords.has(record.id));
+                
+                if (allSelected) {
+                    // Deselect all visible records
+                    currentPage.forEach(record => {
+                        selectedRecords.delete(record.id);
+                    });
+                } else {
+                    // Select all visible records
+                    currentPage.forEach(record => {
+                        selectedRecords.add(record.id);
+                    });
+                }
+                
+                // Re-render to update checkboxes
+                renderRecords();
+                updateBatchButtons();
+            }
+            
+            function getCurrentPageRecords() {
+                const startIndex = (currentPage - 1) * RECORDS_PER_PAGE;
+                const endIndex = startIndex + RECORDS_PER_PAGE;
+                return filteredRecords.slice(startIndex, endIndex);
+            }
+            
+            // Show a quick view modal for a record
+            function showQuickView(record) {
+                // Create a modal dialog
+                const modal = document.createElement('div');
+                modal.className = 'quick-view-modal';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                modal.style.zIndex = '1000';
+                
+                // Create the modal content
+                const modalContent = document.createElement('div');
+                modalContent.className = 'quick-view-content';
+                modalContent.style.backgroundColor = 'var(--card-bg)';
+                modalContent.style.borderRadius = '10px';
+                modalContent.style.padding = '20px';
+                modalContent.style.maxWidth = '500px';
+                modalContent.style.width = '90%';
+                modalContent.style.maxHeight = '80vh';
+                modalContent.style.overflowY = 'auto';
+                modalContent.style.position = 'relative';
+                modalContent.style.border = '1px solid var(--card-border)';
+                modalContent.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+                
+                // Add close button
+                const closeBtn = document.createElement('button');
+                closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                closeBtn.style.position = 'absolute';
+                closeBtn.style.top = '10px';
+                closeBtn.style.right = '10px';
+                closeBtn.style.background = 'none';
+                closeBtn.style.border = 'none';
+                closeBtn.style.color = 'var(--text-primary)';
+                closeBtn.style.fontSize = '20px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.onclick = () => {
+                    document.body.removeChild(modal);
+                };
+                
+                // Format date
+                let formattedDate;
+                try {
+                    const date = new Date(record.timestamp);
+                    formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                } catch {
+                    formattedDate = "Unknown date";
+                }
+                
+                // Get status class and recommendation
+                let statusClass, recommendation;
+                switch (record.health_status.toLowerCase()) {
+                    case 'healthy':
+                        statusClass = 'color: var(--success)';
+                        recommendation = record.type === 'shrimp' ? 
+                            "No disease detected. Continue regular monitoring and maintain good pond management practices." :
+                            "Fish appears healthy. Continue regular monitoring and maintain good water quality.";
+                        break;
+                    case 'unhealthy':
+                        statusClass = 'color: var(--danger)';
+                        recommendation = record.type === 'shrimp' ? 
+                            "Signs of disease detected. Improve water quality, increase aeration, and consult a specialist." :
+                            "Signs of disease detected. Consider quarantining affected fish, improving water parameters, and consulting with a fish health specialist.";
+                        break;
+                    case 'wssv':
+                        statusClass = 'color: var(--warning)';
+                        recommendation = "Apply immunostimulants like beta-glucans. Maintain optimum pond salinity. Disinfect with chlorine-based products. Avoid sudden temperature drops.";
+                        break;
+                    case 'blackgill':
+                        statusClass = 'color: var(--primary)';
+                        recommendation = "Improve water quality. Increase aeration. Reduce organic load and remove sludge. Use probiotic treatments to restore microbial balance.";
+                        break;
+                    default:
+                        statusClass = '';
+                        recommendation = "No specific recommendation available.";
+                }
+                
+                // Add content
+                modalContent.innerHTML = `
+                    <h2 style="color: var(--text-primary); font-size: 1.5rem; margin-bottom: 20px; padding-right: 30px;">
+                        Analysis Details
+                    </h2>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Sample ID</div>
+                        <div style="color: var(--text-primary); font-size: 1.1rem;">${record.filename}</div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Type</div>
+                        <div style="color: var(--text-primary); font-size: 1.1rem; text-transform: capitalize;">
+                            <i class="fas ${record.type === 'fish' ? 'fa-fish' : 'fa-water'}" style="margin-right: 8px; color: ${record.type === 'fish' ? 'var(--primary)' : 'var(--secondary)'}"></i>
+                            ${record.type}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Farm</div>
+                        <div style="color: var(--text-primary); font-size: 1.1rem;">${record.farm_name || 'N/A'}</div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Health Status</div>
+                        <div style="font-size: 1.1rem; font-weight: 600; ${statusClass};">
+                            ${record.health_status}
+                            ${record.confidence ? ` (${(parseFloat(record.confidence) * 100).toFixed(1)}% confidence)` : ''}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Date Analyzed</div>
+                        <div style="color: var(--text-primary); font-size: 1.1rem;">${formattedDate}</div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 5px;">Recommendation</div>
+                        <div style="color: var(--text-primary); line-height: 1.5; padding: 10px; background-color: rgba(30, 30, 30, 0.3); border-radius: 8px;">
+                            ${recommendation}
+                        </div>
+                    </div>
+                    <div style="margin-top: 25px; display: flex; gap: 10px;">
+                        <a href="${urlBase}/result/${record.type}/${record.id}" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-eye"></i> View Full Details
+                        </a>
+                        <a href="${urlBase}/generate_report/${record.type}/${record.id}" class="btn btn-blue" style="flex: 1;">
+                            <i class="fas fa-download"></i> Download Report
+                        </a>
+                    </div>
+                `;
+                
+                // Add close button to modal content
+                modalContent.appendChild(closeBtn);
+                
+                // Add modal content to modal
+                modal.appendChild(modalContent);
+                
+                // Add modal to body
+                document.body.appendChild(modal);
+                
+                // Close modal when clicking outside
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

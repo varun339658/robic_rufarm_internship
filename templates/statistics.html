@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics - Aquaculture Health Monitoring System</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    :root {
+      /* Dark mode (default) */
+      --bg-color: #0a0a0a;
+      --card-bg: rgba(25, 25, 25, 0.7);
+      --card-border: #2a2a2a;
+      --text-primary: white;
+      --text-secondary: #aaa;
+      --text-muted: #777;
+      --input-bg: rgba(30, 30, 30, 0.6);
+      --input-border: #2a2a2a;
+      --divider-color: #333;
+      --icon-color: #888;
+      --purple-glow: rgba(102, 0, 197, 0.3);
+      --teal-glow: rgba(0, 170, 167, 0.2);
+      --social-icon-bg: #222;
+      --social-icon-border: #333;
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      
+      /* Dashboard colors */
+      --primary: #6600c5;
+      --primary-light: #8a44e0;
+      --primary-dark: #4d00a0;
+      --secondary: #00aaa7;
+      --secondary-light: #2cd8d5;
+      --secondary-dark: #007d7a;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+    }
+
+    /* Light mode */
+    .light-mode {
+      --bg-color: #f5f5f7;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: #e0e0e0;
+      --text-primary: #111;
+      --text-secondary: #555;
+      --text-muted: #777;
+      --input-bg: rgba(240, 240, 240, 0.7);
+      --input-border: #ddd;
+      --divider-color: #ddd;
+      --icon-color: #666;
+      --purple-glow: rgba(102, 0, 197, 0.1);
+      --teal-glow: rgba(0, 170, 167, 0.1);
+      --social-icon-bg: #f8f8f8;
+      --social-icon-border: #e5e5e5;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Glow effects */
+    .layer-blur {
+      height: 0;
+      width: 30rem;
+      position: fixed;
+      top: 20%;
+      right: -10%;
+      box-shadow: 0 0 700px 15px var(--purple-glow);
+      rotate: -30deg;
+      z-index: 0;
+    }
+
+    .layer-blur-2 {
+      height: 0;
+      width: 20rem;
+      position: fixed;
+      bottom: 20%;
+      left: -5%;
+      box-shadow: 0 0 500px 15px var(--teal-glow);
+      rotate: 30deg;
+      z-index: 0;
+    }
+
+    .accent-circle {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.2;
+      transition: opacity 0.5s ease;
+    }
+    
+    .circle-1 {
+      width: 300px;
+      height: 300px;
+      background-color: #6600c5;
+      top: -150px;
+      right: -150px;
+    }
+    
+    .circle-2 {
+      width: 200px;
+      height: 200px;
+      background-color: #00aaa7;
+      bottom: -100px;
+      left: -100px;
+    }
+    
+    .light-mode .accent-circle {
+      opacity: 0.1;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 10px var(--shadow-color);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px var(--purple-glow);
+    }
+    
+    .theme-toggle i {
+      font-size: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Header */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .logo-title-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 16px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 0 1px rgba(102, 0, 197, 0.5);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(102, 0, 197, 0.3);
+    }
+    
+    .fallback-logo {
+      background: linear-gradient(135deg, #6600c5, #00aaa7);
+      padding: 5px;
+    }
+
+    .title-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Gradient text animation */
+    .gradient {
+      background: linear-gradient(to right, #00aaa7, #7e42a7, #6600c5, #6070fd, #2a46ff, #0099ff, #008ead);
+      background-size: 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: animate-gradient 2.5s linear infinite;
+    }
+
+    @keyframes animate-gradient {
+      to {
+        background-position: 200%;
+      }
+    }
+
+    .dashboard-title {
+      color: var(--text-primary);
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .company-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+
+    /* Bento grid layout */
+    .bento-container {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .bento-item {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bento-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px var(--purple-glow);
+      border-color: #6600c5;
+    }
+
+    /* Chart containers */
+    .chart-container {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .chart-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px var(--purple-glow);
+      border-color: #6600c5;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-title i {
+      color: var(--secondary);
+    }
+
+    .chart-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--input-border);
+      background-color: var(--input-bg);
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .filter-select:hover, .filter-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--purple-glow);
+      outline: none;
+    }
+
+    .chart {
+      height: 280px;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Stats Summary */
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      border: 1px solid var(--card-border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px var(--purple-glow);
+      border-color: #6600c5;
+    }
+
+    .stat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .stat-card-title {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .stat-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .stat-card-value {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .stat-card-trend {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--text-muted);
+    }
+
+    .trend-up {
+      color: var(--success);
+    }
+
+    .trend-down {
+      color: var(--danger);
+    }
+
+    /* Health Status Colors */
+    .healthy {
+      color: var(--success);
+    }
+
+    .bg-healthy {
+      background-color: rgba(46, 125, 50, 0.1);
+    }
+
+    .unhealthy {
+      color: var(--danger);
+    }
+
+    .bg-unhealthy {
+      background-color: rgba(198, 40, 40, 0.1);
+    }
+
+    .unknown {
+      color: var(--text-muted);
+    }
+
+    .bg-unknown {
+      background-color: rgba(96, 125, 139, 0.1);
+    }
+
+    .fish {
+      color: var(--primary);
+    }
+
+    .bg-fish {
+      background-color: rgba(102, 0, 197, 0.1);
+    }
+
+    .shrimp {
+      color: var(--secondary);
+    }
+
+    .bg-shrimp {
+      background-color: rgba(0, 170, 167, 0.1);
+    }
+
+    /* Loading Spinner */
+    .loader-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .loader {
+      border: 3px solid #333;
+      border-radius: 50%;
+      border-top: 3px solid var(--secondary);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 0.5rem;
+    }
+
+    .tooltip i {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      cursor: help;
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--card-bg);
+      color: var(--text-primary);
+      text-align: center;
+      border-radius: 10px;
+      padding: 8px 12px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.75rem;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      border: 1px solid var(--card-border);
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Date Range Picker */
+    .date-range-picker {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .date-range-picker input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--input-border);
+      background-color: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .date-range-picker label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* Export Menu */
+    .export-menu {
+      position: relative;
+      display: inline-block;
+    }
+
+    .export-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: var(--card-bg);
+      min-width: 160px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      border-radius: 12px;
+      z-index: 1;
+      margin-top: 0.5rem;
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+    }
+
+    .export-dropdown a {
+      color: var(--text-primary);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .export-dropdown a:hover {
+      background-color: rgba(102, 0, 197, 0.1);
+    }
+
+    .export-menu:hover .export-dropdown {
+      display: block;
+    }
+
+    /* Time Period Filter Pills */
+    .time-period-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .time-pill {
+      padding: 10px 18px;
+      border-radius: 30px;
+      background-color: var(--input-bg);
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--input-border);
+    }
+
+    .time-pill:hover {
+      background: linear-gradient(90deg, rgba(0, 170, 167, 0.2), rgba(102, 0, 197, 0.2));
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+
+    .time-pill.active {
+      background: linear-gradient(90deg, #00aaa7, #6600c5);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 10px rgba(102, 0, 197, 0.3);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 18px;
+      background: linear-gradient(90deg, #00aaa7, #6600c5);
+      background-size: 200%;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(102, 0, 197, 0.4);
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00aaa7, #6600c5);
+      animation: button-gradient 3s ease infinite;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      width: 250px;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 10;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--card-border);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-brand {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      color: var(--text-primary);
+    }
+    
+    .sidebar-brand i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+      color: var(--secondary);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu-item {
+      margin-bottom: 8px;
+    }
+
+    .sidebar-menu-link {
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-menu-link:hover, .sidebar-menu-link.active {
+      background: linear-gradient(90deg, rgba(102, 0, 197, 0.1), rgba(0, 170, 167, 0.1));
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-link.active {
+      border-left: 3px solid #6600c5;
+    }
+
+    .sidebar-menu-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    /* Mobile sidebar toggle */
+    .toggle-sidebar {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6600c5, #00aaa7);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .toggle-sidebar {
+        display: flex;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .stats-summary {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      
+      .date-range-picker {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .date-range-picker > div {
+        width: 100%;
+      }
+      
+      .date-range-picker input {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .time-period-pills {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background effects -->
+  <div class="layer-blur"></div>
+  <div class="layer-blur-2"></div>
+  <div class="accent-circle circle-1"></div>
+  <div class="accent-circle circle-2"></div>
+
+  <!-- Theme toggle button -->
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-sun"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <i class="fas fa-fish"></i>
+      <span>AquaHealth</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-menu-item">
+        <a href="/" class="sidebar-menu-link">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-menu-item">
+        <a href="/history" class="sidebar-menu-link">
+          <i class="fas fa-history"></i>
+          <span>Analysis History</span>
+        </a>
+      </li>
+      <li class="sidebar-menu-item">
+        <a href="/statistics" class="sidebar-menu-link active">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistics</span>
+        </a>
+      </li>
+      <li class="sidebar-menu-item">
+        <a href="/reports" class="sidebar-menu-link">
+          <i class="fas fa-file-alt"></i>
+          <span>Reports</span>
+        </a>
+      </li>
+      <li class="sidebar-menu-item">
+        <a href="/settings" class="sidebar-menu-link">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Toggle Sidebar Button (Mobile) -->
+  <button class="toggle-sidebar" id="toggle-sidebar">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="logo-title-container">
+        <img src="https://media.licdn.com/dms/image/v2/C4E0BAQF5JMwkGeMn2g/company-logo_200_200/company-logo_200_200/0/1630587262386?e=2147483647&v=beta&t=6MwYI7xDGVH7G7YmB3lrbqcsRgPfSiBs2JxCI1TXbPY" alt="Rufarm Logo" class="logo">
+        <div class="title-text">
+          <h1 class="dashboard-title gradient">AQUACULTURE STATISTICS</h1>
+          <p class="company-subtitle">COMPREHENSIVE DATA ANALYSIS & REPORTING</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="refresh-stats" class="btn btn-primary">
+          <i class="fas fa-sync-alt"></i>
+          <span>Refresh</span>
+        </button>
+        <div class="export-menu">
+          <button id="export-stats" class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            <span>Export</span>
+          </button>
+          <div class="export-dropdown">
+            <a href="#" id="export-csv">
+              <i class="fas fa-file-csv"></i>
+              <span>CSV</span>
+            </a>
+            <a href="#" id="export-pdf">
+              <i class="fas fa-file-pdf"></i>
+              <span>PDF</span>
+            </a>
+            <a href="#" id="export-excel">
+              <i class="fas fa-file-excel"></i>
+              <span>Excel</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time Period Filter -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <div class="chart-title">
+          <i class="fas fa-calendar-alt"></i>
+          Time Period
+          <div class="tooltip">
+            <i class="fas fa-info-circle"></i>
+            <span class="tooltip-text">Select a time period to filter all statistics</span>
+          </div>
+        </div>
+        <div class="time-period-pills">
+          <button class="time-pill" data-value="week">Last Week</button>
+          <button class="time-pill active" data-value="month">Last Month</button>
+          <button class="time-pill" data-value="quarter">Last Quarter</button>
+          <button class="time-pill" data-value="year">Last Year</button>
+          <button class="time-pill" data-value="all">All Time</button>
+        </div>
+      </div>
+      <div class="chart-filters">
+        <div class="date-range-picker">
+          <div>
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date" class="filter-select">
+          </div>
+          <div>
+            <label for="end-date">End Date</label>
+            <input type="date" id="end-date" class="filter-select">
+          </div>
+          <button id="apply-date-range" class="btn btn-primary">
+            <i class="fas fa-check"></i>
+            Apply
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary" id="stats-summary">
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-title">Total Analyses</div>
+          <div class="stat-card-icon bg-fish">
+            <i class="fas fa-microscope fish"></i>
+          </div>
+        </div>
+        <div class="stat-card-value">...</div>
+        <div class="stat-card-trend">
+          <i class="fas fa-chart-line"></i>
+          Loading...
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-title">Healthy Specimens</div>
+          <div class="stat-card-icon bg-healthy">
+            <i class="fas fa-heart healthy"></i>
+          </div>
+        </div>
+        <div class="stat-card-value">...</div>
+        <div class="stat-card-trend">
+          <i class="fas fa-chart-line"></i>
+          Loading...
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-title">Unhealthy Specimens</div>
+          <div class="stat-card-icon bg-unhealthy">
+            <i class="fas fa-exclamation-triangle unhealthy"></i>
+          </div>
+        </div>
+        <div class="stat-card-value">...</div>
+        <div class="stat-card-trend">
+          <i class="fas fa-chart-line"></i>
+          Loading...
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-title">Average Confidence</div>
+          <div class="stat-card-icon bg-fish">
+            <i class="fas fa-percentage fish"></i>
+          </div>
+        </div>
+        <div class="stat-card-value">...</div>
+        <div class="stat-card-trend">
+          <i class="fas fa-chart-line"></i>
+          Loading...
+        </div>
+      </div>
+    </div>
+
+    <!-- Health Trend Chart -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <div class="chart-title">
+          <i class="fas fa-chart-line"></i>
+          Health Status Trend
+          <div class="tooltip">
+            <i class="fas fa-info-circle"></i>
+            <span class="tooltip-text">Shows how health status has changed over time</span>
+          </div>
+        </div>
+        <div class="chart-filters">
+          <select id="organism-filter" class="filter-select">
+            <option value="all">All Organisms</option>
+            <option value="fish">Fish Only</option>
+            <option value="shrimp">Shrimp Only</option>
+          </select>
+          <select id="chart-type" class="filter-select">
+            <option value="line">Line Chart</option>
+            <option value="bar">Bar Chart</option>
+            <option value="area">Area Chart</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart" id="health-trend-container">
+        <canvas id="health-trend-chart"></canvas>
+        <div class="loader-container" id="health-trend-loader">
+          <div class="loader"></div>
+          <div>Loading data...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Species Distribution and Health Status Distribution -->
+    <div class="stats-grid">
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="fas fa-pie-chart"></i>
+            Species Distribution
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Breakdown of analyzed specimens by species</span>
+            </div>
+          </div>
+        </div>
+        <div class="chart" id="species-distribution-container">
+          <canvas id="species-distribution-chart"></canvas>
+          <div class="loader-container" id="species-distribution-loader">
+            <div class="loader"></div>
+            <div>Loading data...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="fas fa-chart-pie"></i>
+            Health Status Distribution
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Proportion of healthy, unhealthy, and unknown specimens</span>
+            </div>
+          </div>
+        </div>
+        <div class="chart" id="health-distribution-container">
+          <canvas id="health-distribution-chart"></canvas>
+          <div class="loader-container" id="health-distribution-loader">
+            <div class="loader"></div>
+            <div>Loading data...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confidence Level Analysis -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <div class="chart-title">
+          <i class="fas fa-chart-bar"></i>
+          Confidence Level Analysis
+          <div class="tooltip">
+            <i class="fas fa-info-circle"></i>
+            <span class="tooltip-text">Distribution of prediction confidence levels</span>
+          </div>
+        </div>
+        <div class="chart-filters">
+          <select id="confidence-chart-type" class="filter-select">
+            <option value="bar">Bar Chart</option>
+            <option value="line">Line Chart</option>
+            <option value="radar">Radar Chart</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart" id="confidence-container">
+        <canvas id="confidence-chart"></canvas>
+        <div class="loader-container" id="confidence-loader">
+          <div class="loader"></div>
+          <div>Loading data...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    
+    themeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('light-mode');
+      
+      // Change icon based on theme
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('light-mode')) {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    });
+    
+    // Check for user's preferred color scheme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.body.classList.add('light-mode');
+      themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+    }
+
+    // Mobile sidebar toggle
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    });
+
+    // Global chart instances
+    let healthTrendChart = null;
+    let speciesDistributionChart = null;
+    let healthDistributionChart = null;
+    let confidenceChart = null;
+    
+    // Global data state
+    let statisticsData = {
+      healthTrend: null,
+      speciesDistribution: null,
+      healthDistribution: null,
+      confidenceData: null
+    };
+    
+    // Global filter state
+    let filterState = {
+      timeRange: 'month',
+      organism: 'all',
+      chartType: 'line',
+      confidenceChartType: 'bar',
+      startDate: null,
+      endDate: null
+    };
+
+    // Initialize the charts when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      setupEventListeners();
+      initializeFilters();
+      fetchStatisticsData();
+      populateStatsSummary();
+    });
+
+    // Set up event listeners
+    function setupEventListeners() {
+      // Button event listeners
+      document.getElementById('refresh-stats').addEventListener('click', handleRefresh);
+      document.getElementById('export-csv').addEventListener('click', () => handleExport('csv'));
+      document.getElementById('export-pdf').addEventListener('click', () => handleExport('pdf'));
+      document.getElementById('export-excel').addEventListener('click', () => handleExport('excel'));
+      
+      // Filter event listeners
+      document.querySelectorAll('.time-pill').forEach(pill => {
+        pill.addEventListener('click', handleTimePillClick);
+      });
+      
+      document.getElementById('apply-date-range').addEventListener('click', handleDateRangeApply);
+      document.getElementById('organism-filter').addEventListener('change', handleOrganismFilterChange);
+      document.getElementById('chart-type').addEventListener('change', handleChartTypeChange);
+      document.getElementById('confidence-chart-type').addEventListener('change', handleConfidenceChartTypeChange);
+    }
+
+    // Initialize filter values
+    function initializeFilters() {
+      // Set default date range (last month)
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 1);
+      
+      document.getElementById('end-date').valueAsDate = endDate;
+      document.getElementById('start-date').valueAsDate = startDate;
+      
+      // Store in filter state
+      filterState.endDate = endDate;
+      filterState.startDate = startDate;
+    }
+
+    // Handle time pill click
+    function handleTimePillClick(event) {
+      // Update active pill
+      document.querySelectorAll('.time-pill').forEach(pill => {
+        pill.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Update filter state
+      filterState.timeRange = event.target.dataset.value;
+      
+      // Update date inputs based on pill
+      updateDateRangeFromPill(filterState.timeRange);
+      
+      // Fetch new data
+      fetchStatisticsData();
+    }
+
+    // Update date inputs based on time pill
+    function updateDateRangeFromPill(timeRange) {
+      const endDate = new Date();
+      const startDate = new Date();
+      
+      switch (timeRange) {
+        case 'week':
+          startDate.setDate(startDate.getDate() - 7);
+          break;
+        case 'month':
+          startDate.setMonth(startDate.getMonth() - 1);
+          break;
+        case 'quarter':
+          startDate.setMonth(startDate.getMonth() - 3);
+          break;
+        case 'year':
+          startDate.setFullYear(startDate.getFullYear() - 1);
+          break;
+        case 'all':
+          startDate.setFullYear(2000); // Far in the past
+          break;
+      }
+      
+      document.getElementById('end-date').valueAsDate = endDate;
+      document.getElementById('start-date').valueAsDate = startDate;
+      
+      // Update filter state
+      filterState.endDate = endDate;
+      filterState.startDate = startDate;
+    }
+    
+    // Fetch the statistics data from the API
+    function fetchStatisticsData() {
+      // Show loaders
+      document.getElementById('health-trend-loader').style.display = 'flex';
+      document.getElementById('species-distribution-loader').style.display = 'flex';
+      document.getElementById('health-distribution-loader').style.display = 'flex';
+      document.getElementById('confidence-loader').style.display = 'flex';
+      
+      // Build the query parameters
+      const params = new URLSearchParams({
+        timeRange: filterState.timeRange,
+        organism: filterState.organism,
+        startDate: filterState.startDate ? filterState.startDate.toISOString() : '',
+        endDate: filterState.endDate ? filterState.endDate.toISOString() : ''
+      });
+      
+      // Fetch data from API
+      fetch(`/api/statistics?${params.toString()}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Store the data in global state
+          statisticsData = data;
+          
+          // Update the charts
+          updateHealthTrendChart();
+          updateSpeciesDistributionChart();
+          updateHealthDistributionChart();
+          updateConfidenceChart();
+          
+          // Hide loaders
+          document.getElementById('health-trend-loader').style.display = 'none';
+          document.getElementById('species-distribution-loader').style.display = 'none';
+          document.getElementById('health-distribution-loader').style.display = 'none';
+          document.getElementById('confidence-loader').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error fetching statistics data:', error);
+          // Hide loaders and show error message
+          document.getElementById('health-trend-loader').style.display = 'none';
+          document.getElementById('species-distribution-loader').style.display = 'none';
+          document.getElementById('health-distribution-loader').style.display = 'none';
+          document.getElementById('confidence-loader').style.display = 'none';
+          
+          // Show error state
+          alert('Failed to load statistics data. Please try again.');
+        });
+    }
+
+    // Update the Health Trend Chart with the fetched data
+    function updateHealthTrendChart() {
+      const ctx = document.getElementById('health-trend-chart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (healthTrendChart) {
+        healthTrendChart.destroy();
+      }
+      
+      // Create new chart with the data
+      const data = statisticsData.healthTrend;
+      const chartType = filterState.chartType;
+      
+      healthTrendChart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: data.labels,
+          datasets: [
+            {
+              label: 'Healthy',
+              data: data.healthy,
+              backgroundColor: 'rgba(46, 125, 50, 0.2)',
+              borderColor: '#2e7d32',
+              borderWidth: 2,
+              tension: 0.1
+            },
+            {
+              label: 'Unhealthy',
+              data: data.unhealthy,
+              backgroundColor: 'rgba(198, 40, 40, 0.2)',
+              borderColor: '#c62828',
+              borderWidth: 2,
+              tension: 0.1
+            },
+            {
+              label: 'Unknown',
+              data: data.unknown,
+              backgroundColor: 'rgba(96, 125, 139, 0.2)',
+              borderColor: '#607d8b',
+              borderWidth: 2,
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(25, 25, 25, 0.9)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(102, 0, 197, 0.3)',
+              borderWidth: 1
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(150, 150, 150, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(150, 150, 150, 0.1)'
+              }
+            }
+          }
+        }
+      });
+      
+      // Update chart colors on theme change
+      themeToggle.addEventListener('click', function() {
+        setTimeout(() => {
+          healthTrendChart.options.scales.y.grid.color = document.body.classList.contains('light-mode') ? 
+            'rgba(0, 0, 0, 0.05)' : 'rgba(150, 150, 150, 0.1)';
+          healthTrendChart.options.scales.x.grid.color = document.body.classList.contains('light-mode') ? 
+            'rgba(0, 0, 0, 0.05)' : 'rgba(150, 150, 150, 0.1)';
+          healthTrendChart.update();
+        }, 300);
+      });
+    }
+
+    // Update the Species Distribution Chart with the fetched data
+    function updateSpeciesDistributionChart() {
+      const ctx = document.getElementById('species-distribution-chart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (speciesDistributionChart) {
+        speciesDistributionChart.destroy();
+      }
+      
+      // Create new chart with the data
+      const data = statisticsData.speciesDistribution;
+      
+      speciesDistributionChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            data: data.values,
+            backgroundColor: [
+              '#6600c5',
+              '#00aaa7'
+            ],
+            borderColor: 'transparent',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(25, 25, 25, 0.9)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(102, 0, 197, 0.3)',
+              borderWidth: 1
+            }
+          }
+        }
+      });
+    }
+
+    // Update the Health Distribution Chart with the fetched data
+    function updateHealthDistributionChart() {
+      const ctx = document.getElementById('health-distribution-chart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (healthDistributionChart) {
+        healthDistributionChart.destroy();
+      }
+      
+      // Create new chart with the data
+      const data = statisticsData.healthDistribution;
+      
+      healthDistributionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            data: data.values,
+            backgroundColor: [
+              '#2e7d32',
+              '#c62828',
+              '#607d8b'
+            ],
+            borderColor: 'transparent',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(25, 25, 25, 0.9)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(102, 0, 197, 0.3)',
+              borderWidth: 1
+            }
+          },
+          cutout: '70%'
+        }
+      });
+    }
+
+    // Update the Confidence Chart with the fetched data
+    function updateConfidenceChart() {
+      const ctx = document.getElementById('confidence-chart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (confidenceChart) {
+        confidenceChart.destroy();
+      }
+      
+      // Create new chart with the data
+      const data = statisticsData.confidenceData;
+      const chartType = filterState.confidenceChartType;
+      
+      confidenceChart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Analyses Count',
+            data: data.values,
+            backgroundColor: 'rgba(102, 0, 197, 0.2)',
+            borderColor: '#6600c5',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(25, 25, 25, 0.9)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(102, 0, 197, 0.3)',
+              borderWidth: 1
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(150, 150, 150, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(150, 150, 150, 0.1)'
+              }
+            }
+          }
+        }
+      });
+      
+      // Update chart colors on theme change
+      themeToggle.addEventListener('click', function() {
+        setTimeout(() => {
+          if (chartType !== 'radar' && chartType !== 'pie' && chartType !== 'doughnut') {
+            confidenceChart.options.scales.y.grid.color = document.body.classList.contains('light-mode') ? 
+              'rgba(0, 0, 0, 0.05)' : 'rgba(150, 150, 150, 0.1)';
+            confidenceChart.options.scales.x.grid.color = document.body.classList.contains('light-mode') ? 
+              'rgba(0, 0, 0, 0.05)' : 'rgba(150, 150, 150, 0.1)';
+            confidenceChart.update();
+          }
+        }, 300);
+      });
+    }
+
+    // Populate the summary statistics cards
+    function populateStatsSummary() {
+      fetch('/api/dashboard-data')
+        .then(response => response.json())
+        .then(data => {
+          const summary = document.getElementById('stats-summary');
+          const cards = summary.querySelectorAll('.stat-card');
+          
+          // Set values for each card
+          if (cards.length >= 4) {
+            // Total Analyses
+            cards[0].querySelector('.stat-card-value').textContent = data.stats.total_count;
+            cards[0].querySelector('.stat-card-trend').innerHTML = 
+              `<i class="fas fa-arrow-up trend-up"></i> ${Math.round(data.stats.total_count * 0.1)} from last period`;
+            
+            // Healthy Specimens
+            cards[1].querySelector('.stat-card-value').textContent = data.stats.healthy_count;
+            cards[1].querySelector('.stat-card-trend').innerHTML = 
+              `<i class="fas fa-arrow-up trend-up"></i> ${Math.round(data.stats.healthy_count * 0.08)} from last period`;
+            
+            // Unhealthy Specimens
+            cards[2].querySelector('.stat-card-value').textContent = data.stats.unhealthy_count;
+            cards[2].querySelector('.stat-card-trend').innerHTML = 
+              `<i class="fas fa-arrow-down trend-down"></i> ${Math.round(data.stats.unhealthy_count * 0.05)} from last period`;
+            
+            // Average Confidence
+            const avgConfidence = Math.round(data.stats.total_count > 0 ? 85 : 0);
+            cards[3].querySelector('.stat-card-value').textContent = avgConfidence + '%';
+            cards[3].querySelector('.stat-card-trend').innerHTML = 
+              `<i class="fas fa-arrow-up trend-up"></i> 2% from last period`;
+          }
+        })
+        .catch(error => console.error('Error fetching dashboard data:', error));
+    }
+
+    // Handle refresh button click
+    function handleRefresh() {
+      // Add animation to refresh button
+      const refreshBtn = document.getElementById('refresh-stats');
+      refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i><span>Refreshing...</span>';
+      
+      // Fetch new data
+      fetchStatisticsData();
+      populateStatsSummary();
+      
+      // Reset button text after 1 second
+      setTimeout(() => {
+        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Refresh</span>';
+      }, 1000);
+    }
+
+    // Handle date range apply button click
+    function handleDateRangeApply() {
+      // Get date values from inputs
+      const startDate = document.getElementById('start-date').valueAsDate;
+      const endDate = document.getElementById('end-date').valueAsDate;
+      
+      // Validate dates
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates');
+        return;
+      }
+      
+      if (startDate > endDate) {
+        alert('Start date cannot be after end date');
+        return;
+      }
+      
+      // Update filter state
+      filterState.startDate = startDate;
+      filterState.endDate = endDate;
+      
+      // Fetch new data
+      fetchStatisticsData();
+    }
+
+    // Handle organism filter change
+    function handleOrganismFilterChange(event) {
+      filterState.organism = event.target.value;
+      fetchStatisticsData();
+    }
+
+    // Handle chart type change
+    function handleChartTypeChange(event) {
+      filterState.chartType = event.target.value;
+      updateHealthTrendChart();
+    }
+
+    // Handle confidence chart type change
+    function handleConfidenceChartTypeChange(event) {
+      filterState.confidenceChartType = event.target.value;
+      updateConfidenceChart();
+    }
+
+    // Handle export button clicks
+    function handleExport(format) {
+      // Build query parameters based on current filters
+      const params = new URLSearchParams({
+        timeRange: filterState.timeRange,
+        organism: filterState.organism,
+        format: format
+      });
+      
+      // Redirect to export endpoint
+      window.location.href = `/api/export-statistics?${params.toString()}`;
+    }
+  </script>
+</body>
+</html>

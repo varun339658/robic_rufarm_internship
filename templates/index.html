@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robic Rufarm - Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      /* Dark mode (default) */
+      --bg-color: #0a0a0a;
+      --card-bg: rgba(25, 25, 25, 0.7);
+      --card-border: #2a2a2a;
+      --text-primary: white;
+      --text-secondary: #aaa;
+      --text-muted: #777;
+      --input-bg: rgba(30, 30, 30, 0.6);
+      --input-border: #2a2a2a;
+      --divider-color: #333;
+      --icon-color: #888;
+      --purple-glow: rgba(102, 0, 197, 0.3);
+      --teal-glow: rgba(0, 170, 167, 0.2);
+      --social-icon-bg: #222;
+      --social-icon-border: #333;
+      --shadow-color: rgba(0, 0, 0, 0.3);
+    }
+
+    /* Light mode */
+    .light-mode {
+      --bg-color: #f5f5f7;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: #e0e0e0;
+      --text-primary: #111;
+      --text-secondary: #555;
+      --text-muted: #777;
+      --input-bg: rgba(240, 240, 240, 0.7);
+      --input-border: #ddd;
+      --divider-color: #ddd;
+      --icon-color: #666;
+      --purple-glow: rgba(102, 0, 197, 0.1);
+      --teal-glow: rgba(0, 170, 167, 0.1);
+      --social-icon-bg: #f8f8f8;
+      --social-icon-border: #e5e5e5;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Glow effects */
+    .layer-blur {
+      height: 0;
+      width: 30rem;
+      position: fixed;
+      top: 20%;
+      right: -10%;
+      box-shadow: 0 0 700px 15px var(--purple-glow);
+      rotate: -30deg;
+      z-index: 0;
+    }
+
+    .layer-blur-2 {
+      height: 0;
+      width: 20rem;
+      position: fixed;
+      bottom: 20%;
+      left: -5%;
+      box-shadow: 0 0 500px 15px var(--teal-glow);
+      rotate: 30deg;
+      z-index: 0;
+    }
+
+    .accent-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.2;
+      transition: opacity 0.5s ease;
+    }
+    
+    .circle-1 {
+      width: 300px;
+      height: 300px;
+      background-color: #6600c5;
+      top: -150px;
+      right: -150px;
+    }
+    
+    .circle-2 {
+      width: 200px;
+      height: 200px;
+      background-color: #00aaa7;
+      bottom: -100px;
+      left: -100px;
+    }
+    
+    .light-mode .accent-circle {
+      opacity: 0.1;
+    }
+
+    /* Bento grid layout */
+    .bento-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 24px;
+      max-width: 1000px;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .bento-item {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      padding: 32px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bento-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px var(--purple-glow);
+      border-color: #6600c5;
+    }
+    
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 10px var(--shadow-color);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px var(--purple-glow);
+    }
+    
+    .theme-toggle i {
+      font-size: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Title section */
+    .title-section {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .logo-title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      margin-right: 24px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 0 1px rgba(102, 0, 197, 0.5);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(102, 0, 197, 0.3);
+    }
+    
+    .title-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    /* Gradient text animation */
+    .gradient {
+      background: linear-gradient(to right, #00aaa7, #7e42a7, #6600c5, #6070fd, #2a46ff, #0099ff, #008ead);
+      background-size: 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: animate-gradient 2.5s linear infinite;
+    }
+
+    @keyframes animate-gradient {
+      to {
+        background-position: 200%;
+      }
+    }
+
+    /* Auth section */
+    .auth-section {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .sidebar-section {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Typography */
+    h2 {
+      color: var(--text-primary);
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 0;
+      letter-spacing: 1px;
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.7rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin: 20px 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .company-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    .tabs button {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: none;
+      animation: none;
+      letter-spacing: 0.5px;
+    }
+
+    .tabs button.active {
+      color: var(--text-primary);
+      position: relative;
+    }
+
+    .tabs button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #00aaa7, #6600c5, #2a46ff);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* Forms */
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 16px 16px 50px;
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      background-color: var(--input-bg);
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      background-color: var(--input-bg);
+      border-color: #6600c5;
+      box-shadow: 0 0 15px var(--purple-glow);
+    }
+
+    input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--icon-color);
+      font-size: 18px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(90deg, #00aaa7, #6600c5, #2a46ff);
+      background-size: 200%;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      animation: button-gradient 3s ease infinite;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes button-gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(102, 0, 197, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Links */
+    a {
+      color: #00aaa7;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    a:hover {
+      color: #6600c5;
+      text-shadow: 0 0 8px var(--purple-glow);
+    }
+
+    /* Dividers */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 28px 0;
+    }
+
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    .divider span {
+      padding: 0 15px;
+      color: var(--text-muted);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Social Icons */
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .social-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px var(--shadow-color);
+      background: var(--social-icon-bg);
+      border: 1px solid var(--social-icon-border);
+    }
+
+    .google { color: #db4437; }
+    .linkedin { color: #0077b5; }
+    .facebook { color: #3b5998; }
+    .twitter { color: #1DA1F2; }
+
+    .social-icon:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 6px 12px rgba(102, 0, 197, 0.3);
+      border-color: currentColor;
+    }
+
+    .social-icon i {
+      font-size: 20px;
+    }
+
+    /* Sidebar content */
+    .sidebar-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-top, .sidebar-bottom {
+      width: 100%;
+      text-align: center;
+    }
+
+    .sidebar-icon {
+      font-size: 40px;
+      color: #6600c5;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    /* Flash messages */
+    .flash-message {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background-color: rgba(30, 30, 30, 0.7);
+      color: white;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .flash-message.error {
+      background-color: rgba(220, 53, 69, 0.7);
+    }
+
+    .flash-message.success {
+      background-color: rgba(40, 167, 69, 0.7);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .bento-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .title-section {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .auth-section {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .sidebar-section {
+        grid-column: 1;
+        grid-row: 3;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .bento-item {
+        padding: 24px;
+      }
+
+      .title-section {
+        padding: 16px;
+      }
+
+      .logo-title-container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo {
+        margin-right: 0;
+        margin-bottom: 16px;
+        width: 85px;
+        height: 85px;
+      }
+
+      .title-text {
+        align-items: center;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+      }
+
+      .social-login {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background effects -->
+  <div class="layer-blur"></div>
+  <div class="layer-blur-2"></div>
+  <div class="accent-circle circle-1"></div>
+  <div class="accent-circle circle-2"></div>
+  
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-sun"></i>
+  </div>
+  
+  <div class="bento-container">
+    <!-- Title Section -->
+    <div class="bento-item title-section">
+      <div class="logo-title-container">
+        <img src="{{ url_for('static', filename='images/logo_robic_rufarm.jpg') }}" alt="Rufarm Logo" class="logo" onerror="this.src='https://via.placeholder.com/90x90?text=Rufarm'">
+        <div class="title-text">
+          <h2 class="gradient">ROBIC RUFARM</h2>
+          <p class="company-subtitle">PRIVATE LIMITED</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Auth Section -->
+    <div class="bento-item auth-section">
+      <!-- Flash Messages -->
+      {% if error %}
+      <div class="flash-message error">
+        {{ error }}
+      </div>
+      {% endif %}
+      
+      {% if success %}
+      <div class="flash-message success">
+        {{ success }}
+      </div>
+      {% endif %}
+      
+      <div class="tabs">
+        <button id="login-tab" class="active">Login</button>
+        <button id="signup-tab">Sign Up</button>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form active" action="{{ url_for('login') }}" method="post">
+        <h3 class="gradient">Welcome to Robic Rufarm</h3>
+        <div class="input-group">
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <input name="username" placeholder="Username" required>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+          </div>
+          <input name="password" type="password" placeholder="Password" required>
+        </div>
+        <button type="submit">Sign In</button>
+        <p>Don't have an account? <a href="#" id="show-signup">Create Account</a></p>
+      </form>
+      
+      <!-- Sign Up Form -->
+      <form id="signup-form" class="auth-form" action="{{ url_for('signup') }}" method="post">
+        <h3 class="gradient">Join Robic Rufarm</h3>
+        <div class="input-group">
+          <div class="input-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <input name="email" type="email" placeholder="Email" required>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <input name="username" placeholder="Username" required>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+          </div>
+          <input name="password" type="password" placeholder="Password" required>
+        </div>
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+      </form>
+
+      <div class="divider">
+        <span>OR CONTINUE WITH</span>
+      </div>
+
+      <div class="social-login">
+        <a href="{{ url_for('oauth_login', provider='google') }}" class="social-icon google" title="Login with Google">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="{{ url_for('oauth_login', provider='facebook') }}" class="social-icon linkedin" title="Login with LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="{{ url_for('oauth_login', provider='linkedin') }}" class="social-icon facebook" title="Login with Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+       
+      </div>
+    </div>
+    
+    <!-- Sidebar Section -->
+    <div class="bento-item sidebar-section">
+      <div class="sidebar-content">
+        <div class="sidebar-top">
+          <i class="fas fa-seedling sidebar-icon"></i>
+          <p style="font-size: 16px; color: #bbb; margin-bottom: 30px;">
+            Advanced agricultural technology for modern farming solutions
+          </p>
+        </div>
+        
+        <div class="sidebar-bottom">
+          <div class="social-login">
+            <a href="#" class="social-icon" style="color: #1DA1F2;">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon" style="color: #E4405F;">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-icon" style="color: #0e76a8;">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+          <p style="margin-top: 20px; font-size: 12px;">© 2025 Robic Rufarm Pvt. Ltd.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching functionality
+    const loginTab = document.getElementById('login-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignup = document.getElementById('show-signup');
+    const showLogin = document.getElementById('show-login');
+    const themeToggle = document.getElementById('themeToggle');
+    
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('light-mode');
+      
+      // Change icon based on theme
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('light-mode')) {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    });
+    
+    function switchToLogin() {
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      loginForm.classList.add('active');
+      signupForm.classList.remove('active');
+    }
+    
+    function switchToSignup() {
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      signupForm.classList.add('active');
+      loginForm.classList.remove('active');
+    }
+    
+    loginTab.addEventListener('click', switchToLogin);
+    signupTab.addEventListener('click', switchToSignup);
+    showSignup.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchToSignup();
+    });
+    showLogin.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchToLogin();
+    });
+    
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+      themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.body.classList.add('light-mode');
+      themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+    }
+    
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(function() {
+      const flashMessages = document.querySelectorAll('.flash-message');
+      flashMessages.forEach(message => {
+        message.style.opacity = '0';
+        message.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 300);
+      });
+    }, 5000);
+  </script>
+</body>
+</html>
